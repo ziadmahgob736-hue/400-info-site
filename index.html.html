@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>موقع الـ 400 معلومة - تحت إدارة زياد محمد محجوب</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* توقيع زياد الثابت أسفل يسار الشاشة */
+        .fixed-signature {
+            position: fixed;
+            bottom: 15px;
+            left: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            padding: 8px 16px;
+            border-radius: 12px;
+            color: #38bdf8;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        .screen {
+            display: none;
+            opacity: 0;
+            transform: scale(0.96) translateY(15px);
+            width: 100%;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-bottom: 60px;
+        }
+
+        .screen.active {
+            display: flex;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        button, .world-card, .item-card, .option-btn, .tag-chip {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        button:active, .world-card:active, .item-card:active, .option-btn:active {
+            transform: scale(0.94) !important;
+        }
+
+        .welcome-card {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 2px solid rgba(56, 189, 248, 0.5);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+        }
+
+        .name-input-box {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            border: 2px solid #38bdf8;
+            background: #020617;
+            color: #fff;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #start-screen {
+            justify-content: space-between;
+        }
+
+        .hero-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        h1.dynamic-title {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(56, 189, 248, 0.5);
+            margin: 0;
+            text-align: center;
+        }
+
+        .left-footer-box {
+            padding: 30px;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+            border-left: 6px solid #38bdf8;
+            margin-right: auto;
+            margin-bottom: 25px;
+            box-shadow: -15px 15px 35px rgba(0,0,0,0.6);
+            text-align: right;
+        }
+
+        .btn-style {
+            padding: 13px 26px;
+            background: linear-gradient(135deg, #38bdf8, #2563eb);
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 14px;
+            margin-top: 12px;
+            box-shadow: 0 5px 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .btn-style:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.7);
+        }
+
+        #zoo-scene {
+            background: linear-gradient(to bottom, #38bdf8 0%, #bae6fd 60%, #4ade80 60%, #16a34a 100%);
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        .sun {
+            position: absolute;
+            top: 30px;
+            left: 50px;
+            width: 80px;
+            height: 80px;
+            background: #fde047;
+            border-radius: 50%;
+            box-shadow: 0 0 50px #facc15;
+        }
+
+        .zoo-sign {
+            margin-top: 25px;
+            background: #78350f;
+            border: 4px solid #451a03;
+            color: #fef08a;
+            padding: 12px 40px;
+            border-radius: 18px;
+            font-size: 2.3rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .quiz-container {
+            background: rgba(15, 23, 42, 0.94);
+            border: 2px solid rgba(56, 189, 248, 0.5);
+            border-radius: 24px;
+            padding: 30px;
+            margin-top: 25px;
+            width: 90%;
+            max-width: 550px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            background: rgba(30, 41, 59, 0.8);
+            color: #ffffff;
+            border: 2px solid rgba(129, 140, 248, 0.6);
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .option-btn:hover {
+            background: #818cf8;
+            color: #0f172a;
+        }
+
+        .park-elements { position: absolute; bottom: 0; width: 100%; height: 35%; pointer-events: none; }
+        .grass-decor { position: absolute; bottom: 15px; width: 100%; display: flex; justify-content: space-around; font-size: 2.2rem; }
+
+        .search-bar {
+            width: 90%;
+            max-width: 500px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 2px solid #38bdf8;
+            background: rgba(15, 23, 42, 0.9);
+            color: #fff;
+            font-size: 1.05rem;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .worlds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 1300px;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .world-card {
+            background: rgba(30, 41, 59, 0.65);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            padding: 20px 15px;
+            border-radius: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .world-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            background: rgba(56, 189, 248, 0.18);
+        }
+
+        .world-icon { font-size: 2.4rem; margin-bottom: 8px; }
+        .world-title { font-size: 1.15rem; font-weight: bold; margin: 0 0 6px 0; }
+        .world-sub { font-size: 0.85rem; color: #94a3b8; margin: 0; }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 16px;
+            width: 100%;
+            max-width: 1250px;
+            margin: 15px auto;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .item-card {
+            background: rgba(30, 41, 59, 0.75);
+            border: 2px solid rgba(56, 189, 248, 0.4);
+            border-radius: 18px;
+            padding: 20px;
+            text-align: right;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 58, 138, 0.55);
+        }
+
+        .item-title { font-size: 1.15rem; font-weight: bold; margin-bottom: 8px; }
+        .item-preview { font-size: 0.92rem; color: #cbd5e1; line-height: 1.4; }
+
+        .details-box {
+            background: rgba(15, 23, 42, 0.96);
+            border: 2px solid #38bdf8;
+            border-radius: 24px;
+            padding: 32px;
+            text-align: right;
+            width: 92%;
+            max-width: 780px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+
+        .code-block {
+            background: #020617;
+            border: 1px solid #38bdf8;
+            border-radius: 12px;
+            padding: 15px;
+            font-family: Consolas, monospace;
+            direction: ltr;
+            text-align: left;
+            color: #38bdf8;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+        }
+
+        .fifa-card {
+            width: 300px;
+            background: linear-gradient(145deg, #f59e0b, #b45309, #78350f);
+            border: 4px solid #fef08a;
+            border-radius: 24px;
+            padding: 20px;
+            color: #fff;
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.5);
+        }
+        .card-top { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(254, 240, 138, 0.4); padding-bottom: 12px; }
+        .card-rating-box { text-align: center; background: rgba(0, 0, 0, 0.4); padding: 8px 12px; border-radius: 12px; border: 1px solid #fef08a; }
+        .card-rating { font-size: 2.3rem; font-weight: bold; color: #fef08a; line-height: 1; }
+        .card-pos { font-size: 1rem; font-weight: bold; color: #fff; margin-top: 4px; }
+        .card-player-art { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #fef08a; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .card-name { font-size: 1.6rem; font-weight: bold; margin: 12px 0 4px; color: #fef08a; }
+        .card-club { font-size: 0.95rem; background: rgba(0,0,0,0.45); padding: 4px 12px; border-radius: 15px; display: inline-block; margin-bottom: 10px; }
+        .card-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; background: rgba(0, 0, 0, 0.35); padding: 10px; border-radius: 12px; font-size: 0.9rem; margin-bottom: 10px; }
+        .card-desc { font-size: 0.9rem; color: #fef9c3; line-height: 1.4; }
+        .quick-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; max-height: 160px; overflow-y: auto; padding: 4px; }
+        .tag-chip { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(71, 85, 105, 0.8); color: #cbd5e1; padding: 6px 12px; border-radius: 15px; font-size: 0.88rem; }
+        .tag-chip:hover { background: #38bdf8; color: #0f172a; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="fixed-signature">تحت إدارة زياد محمد محجوب 👨‍💻⭐</div>
+
+    <div id="welcome-screen" class="screen active">
+        <div class="welcome-card">
+            <h2 style="color: #38bdf8; margin-top: 0; font-size: 2rem;">موقع الـ 400 معلومة 🎮</h2>
+            <p style="color: #94a3b8; font-size: 1.1rem;">اكتب اسمك عشان نفتح لك الموسوعة:</p>
+            <input type="text" id="visitor-name-input" class="name-input-box" placeholder="اكتب اسمك هنا...">
+            <button type="button" class="btn-style" id="start-site-btn" style="width: 100%;">دخول الموقع الأسطوري 🚀</button>
+        </div>
+    </div>
+
+    <div id="start-screen" class="screen">
+        <div class="hero-section">
+            <h1 class="dynamic-title" id="welcome-title-display">زائر</h1>
+        </div>
+        <div class="left-footer-box">
+            <h3 style="color: #38bdf8; margin-top: 0; font-size: 1.4rem;">جاهز للمغامرة؟</h3>
+            <p style="color: #94a3b8; line-height: 1.5;">عدّي من بوابة حديقة الحيوان وادخل على 20 عالماً مليانين أسرار ومعلومات!</p>
+            <button type="button" class="btn-style" id="enter-zoo-btn">ادخل حديقة الحيوان 🦁</button>
+        </div>
+    </div>
+
+    <div id="zoo-scene" class="screen">
+        <div class="sun"></div>
+        <div class="zoo-sign">🐾 بوابة حديقة الحيوان 🐾</div>
+        <div class="quiz-container">
+            <div id="q-counter" style="color: #38bdf8; font-weight: bold; font-size: 1.1rem;">السؤال 1 من 10</div>
+            <h2 id="q-text" style="color: #f8fafc; font-size: 1.6rem; margin: 15px 0;"></h2>
+            <div class="options-grid" id="options-area"></div>
+            <button type="button" class="btn-style" style="background: #475569; font-size: 0.9rem; padding: 8px 18px; margin-top: 20px;" onclick="switchScreen('worlds-scene')">تخطي الأسئلة والدخول للعوالم مباشرة ⏭️</button>
+        </div>
+        <div class="park-elements">
+            <div class="grass-decor">
+                <span>🌿</span><span>🦁</span><span>🌱</span><span>🦒</span><span>🌷</span><span>🐘</span><span>🌿</span><span>🦓</span><span>🌼</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="worlds-scene" class="screen" style="text-align: center; justify-content: flex-start; padding-top: 20px;">
+        <h1 id="congrats-title" style="color: #38bdf8; font-size: 2rem; margin: 0;">موسوعة الـ 400 معلومة (20 عالماً مختلفاً) 🌍</h1>
+        <input type="text" id="world-search" class="search-bar" placeholder="ابحث عن أي عالم (طوارئ، برمجة، فلك، تاريخ، ديناصورات...)" oninput="filterWorlds()">
+        <div class="worlds-grid" id="worlds-container"></div>
+    </div>
+
+    <div id="world-content-scene" class="screen" style="justify-content: flex-start; padding-top: 25px; text-align: center;">
+        <h1 id="active-world-title" style="margin-bottom: 5px; font-size: 2rem;"></h1>
+        <p id="active-world-desc" style="color: #cbd5e1; margin-top: 0; font-size: 1rem;"></p>
+        <div class="items-grid" id="world-items-list"></div>
+        <button type="button" class="btn-style" style="background: #475569; color: #fff; margin: 10px;" onclick="switchScreen('worlds-scene')">رجوع لقائمة الـ 20 عالم 🔙</button>
+    </div>
+
+    <div id="item-detail-scene" class="screen" style="background: rgba(2,6,23,0.96); text-align: center;">
+        <div class="details-box" id="item-detail-content"></div>
+        <button type="button" class="btn-style" id="back-to-world-btn" style="margin-top: 15px;" onclick="switchScreen('world-content-scene')">العودة لقائمة العالم 🔙</button>
+    </div>
+
+    <div id="football-workspace" class="screen" style="background: radial-gradient(circle, #064e3b 0%, #022c22 100%);">
+        <h1 style="text-align: center; color: #4ade80; margin-bottom: 15px; font-size: 2rem;">⚽ ملعب الأساطير وكروت اللاعبين ⚽</h1>
+        <div style="display:flex; gap:20px; max-width:1250px; margin:0 auto; width:100%; flex-wrap: wrap; justify-content: center;">
+            <div style="flex:1; min-width:300px; background:rgba(15,23,42,0.85); border:2px solid #22c55e; border-radius:20px; padding:20px;">
+                <h3 style="color: #4ade80; margin-top: 0;">اكتب اسم أي أسطورة:</h3>
+                <input type="text" id="player-input" class="name-input-box" placeholder="مثال: صلاح، ميسي، رونالدو..." style="margin: 8px 0; font-size: 1.1rem; padding: 12px;">
+                <button type="button" class="btn-style" style="background: #22c55e; width: 100%; margin-top: 5px;" id="btn-show-player">إظهار كارت اللاعب الذهبي 🃏⚽</button>
+                <div style="margin-top: 12px; font-size:0.9rem; color:#cbd5e1;">اختر سريعاً:</div>
+                <div class="quick-tags" id="quick-players-container"></div>
+                <button type="button" class="btn-style" style="background: #475569; color: #fff; margin-top: 15px; width: 100%;" onclick="switchScreen('worlds-scene')">رجوع للعوالم الـ 20 🔙</button>
+            </div>
+            <div style="flex:1; min-width:300px; background:rgba(15,23,42,0.85); border:2px solid #22c55e; border-radius:20px; padding:20px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <h3 style="color: #4ade80; margin-top: 0;">كارت الأسطورة الذهبي:</h3>
+                <div id="player-output" style="width:100%; min-height:300px; display:flex; align-items:center; justify-content:center; background:#020617; border-radius:16px; border:2px dashed #334155;">
+                    <span style="color: #64748b; font-size: 1.1rem;">اكتب اسم أي لاعب لتظهر بطاقته هنا!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var visitorName = "زائر";
+
+        function switchScreen(screenId) {
+            var screens = document.querySelectorAll('.screen');
+            for (var i = 0; i < screens.length; i++) {
+                screens[i].classList.remove('active');
+            }
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        document.getElementById("start-site-btn").onclick = function() {
+            var inputVal = document.getElementById("visitor-name-input").value.trim();
+            if (inputVal) visitorName = inputVal;
+            document.getElementById("welcome-title-display").innerText = visitorName;
+            document.getElementById("congrats-title").innerText = "موسوعة " + visitorName + " الشاملة (400 معلومة) 🌍";
+            buildQuickPlayers();
+            switchScreen('start-screen');
+        };
+
+        var questions = [
+            { q: "1. بتحب أنهي لاعب أكتر؟", options: ["صلاح 👑", "رونالدو ⚽"] },
+            { q: "2. لو هتجيب حيوان أليف في البيت تختار إيه؟", options: ["أسد صغير 🦁", "قرد شقي 🐒"] },
+            { q: "3. بتحب تروح حديقة الحيوان إمتى؟", options: ["الصبح بدري ☀️", "وقت العصر 🌤️"] },
+            { q: "4. أكتر حيوان بتحب تتفرج عليه؟", options: ["الزرافة 🦒", "الفيل 🐘"] },
+            { q: "5. تحب تلعب كورة في أنهي مركز؟", options: ["مهاجم ⚡", "حارس مرمى 🧤"] },
+            { q: "6. مشروبك المفضل في الحديقة؟", options: ["عصير مانجا 🥭", "آيس كريم 🍦"] },
+            { q: "7. بتحب أنهي لون أكتر؟", options: ["الأزرق 🔵", "الأخضر 🟢"] },
+            { q: "8. تحب تسافر فين؟", options: ["غابات أفريقيا 🌴", "ملاعب أوروبا 🏟️"] },
+            { q: "9. بتفضل تلعب إيه مع صحابك؟", options: ["بلايستيشن 🎮", "كورة في الملعب ⚽"] },
+            { q: "10. جاهز تدخل على موقع الـ 400 معلومة؟", options: ["يلا بينا 🔥", "مستعد جداً 🚀"] }
+        ];
+        var currentQuestion = 0;
+
+        document.getElementById("enter-zoo-btn").onclick = function() {
+            switchScreen('zoo-scene');
+            loadQuestion();
+        };
+
+        function loadQuestion() {
+            var qData = questions[currentQuestion];
+            document.getElementById("q-counter").innerText = "السؤال " + (currentQuestion + 1) + " من 10";
+            document.getElementById("q-text").innerText = qData.q;
+            var optionsArea = document.getElementById("options-area");
+            optionsArea.innerHTML = "";
+            for (var i = 0; i < qData.options.length; i++) {
+                var btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "option-btn";
+                btn.innerText = qData.options[i];
+                btn.onclick = function() {
+                    currentQuestion++;
+                    if (currentQuestion < questions.length) loadQuestion();
+                    else switchScreen('worlds-scene');
+                };
+                optionsArea.appendChild(btn);
+            }
+        }
+
+        var allWorlds = [
+            {
+                id: "emergency", icon: "🚨", title: "1. عالم الطوارئ والإنقاذ", color: "#ef4444", sub: "20 موقف طارئ وكيف تتصرف فوراً",
+                items: [
+                    { t: "1. حريق زيت في المطبخ", d: "إياك تسكب ماء! الماء ينشر النار فوراً.", s: "غطِ الطاسة بغطاء معدني محكم أو ارمِ بيكربونات الصوديوم واقفل البوتاجاز.", c: "" },
+                    { t: "2. شخص شرق في الأكل (اختناق)", d: "انسداد مجرى الهواء ويحتاج تدخل في ثواني.", s: "استخدم مناورة هيمليك: قف خلفه واضغط بقبضة يدك فوق السرة للداخل ولأعلى بقوة.", c: "" },
+                    { t: "3. الإغماء المفاجئ", d: "نقص مؤقت في تدفق الدم للمخ.", s: "اجعله يستلقي على ظهره وارفع قدميه 30 سم للأعلى، ولا تعطه ماء وهو غائب عن الوعي.", c: "" },
+                    { t: "4. زلزال مفاجئ داخل المنزل", d: "الخطر الأكبر هو سقوط الأشياء والزجاج.", s: "طبق قاعدة (انبطح، احتمِ تحت طاولة متينة، وتمسك بها) وابتعد عن النوافذ.", c: "" },
+                    { t: "5. نزيف الأنف (الرعاف)", d: "خطأ شائع: إرجاع الرأس للخلف!", s: "اجلس وأمل رأسك للأمام قليلاً واضغط على الجزء اللين من الأنف لمدة 10 دقائق.", c: "" },
+                    { t: "6. الحروق البسيطة بالماء الساخن", d: "تحتاج تبريد فوري لوقف تلف الجلد.", s: "ضع مكان الحرق تحت ماء جاري فاتر لمدة 15 دقيقة، ولا تضع ثلجاً أو معجون أسنان أبداً.", c: "" },
+                    { t: "7. صعق كهربائي لشخص", d: "لا تلمس الشخص بيدك مباشرة أبداً!", s: "افصل مصدر الكهرباء الرئيسي أولاً، أو أبعد السلك بعصا خشبية جافة أو بلاستيك.", c: "" },
+                    { t: "8. تسرب غاز في الشقة", d: "أي شرارة بسيطة قد تسبب انفجاراً.", s: "لا تشعل النور ولا تستخدم الهاتف، افتح الشبابيك فوراً، اقفل محبس الغاز واخرج.", c: "" },
+                    { t: "9. الضياع في مكان مزدحم", d: "التصرف الهادئ يمنع التشتت.", s: "قف في مكان واضح وآمن، لا تذهب مع غرباء، واطلب المساعدة من شرطي أو موظف أمن.", c: "" },
+                    { t: "10. جرح قطعي ينزف", d: "يجب إيقاف النزيف لمنع فقدان الدم.", s: "اضغط مباشرة على الجرح بقطعة قماش نظيفة ومعقمة وارفع العضو المصاب للأعلى.", c: "" },
+                    { t: "11. لدغة حشرة أو نحلة", d: "قد تسبب تورماً أو حساسية.", s: "أزل الإبرة بكشطها ببطاقة صلبة، اغسل المكان بالماء والصابون وضع كمادة باردة.", c: "" },
+                    { t: "12. ضربة الشمس والإجهاد الحراري", d: "ارتفاع خطير في حرارة الجسم.", s: "انقل المصاب لمكان ظليل وبارد، بلل ملابسه بالماء، وأعطه رشفات ماء بارد ببطء.", c: "" },
+                    { t: "13. انقطاع الكهرباء ليلاً", d: "التحرك في الظلام يسبب السقوط.", s: "استخدم كشاف الهاتف، افصل الأجهزة الحساسة، وتأكد من سلامة مفتاح الأمان.", c: "" },
+                    { t: "14. تعطل المصعد (الأسانسير)", d: "الهواء داخل المصعد لا ينفد كما يظن البعض.", s: "حافظ على هدوئك، اضغط زر الجرس أو اتصل بالطوارئ، ولا تحاول فتح الباب بالقوة.", c: "" },
+                    { t: "15. التواء الكاحل أثناء اللعب", d: "تمدد أو تمزق في أربطة القدم.", s: "طبق قاعدة RICE: راحة تامة، كمادات ثلج ملفوفة بقماش، رباط ضاغط، ورفع القدم.", c: "" },
+                    { t: "16. دخول جسم غريب في العين", d: "فرك العين يخدش القرنية فوراً.", s: "لا تفرك عينك! اغسلها برفق بماء نظيف جاري وحاول الرمش عدة مرات.", c: "" },
+                    { t: "17. الغرق في حمام السباحة", d: "الإنقاذ الآمن يحمي المنقذ والغريق.", s: "ارمِ له عوامة أو مد له عصا طويلة، ولا تقفز لإنقاذه إلا إذا كنت سباحاً محترفاً.", c: "" },
+                    { t: "18. ابتلاع مادة كيميائية بالخطأ", d: "إجبار الشخص على التقيؤ قد يحرق المريء مجدداً!", s: "اتصل بالإسعاف فوراً واحتفظ بعبوة المادة لإخبار الطبيب بنوعها.", c: "" },
+                    { t: "19. كسر في العظام", d: "تحريك العظم المكسور يزيد الضرر.", s: "ثبت الطرف المصاب في وضعه الحالي بجبيرة مؤقتة ولا تحاول تعديله.", c: "" },
+                    { t: "20. أرقام الطوارئ الأساسية في مصر", d: "حفظها ينقذ الأرواح في ثوانٍ.", s: "الإسعاف: 123 | المطافئ: 180 | النجدة: 122 | طوارئ الكهرباء: 121 | الغاز: 129.", c: "" }
+                ]
+            },
+            {
+                id: "programming", icon: "💻", title: "2. عالم البرمجة والأكواد", color: "#38bdf8", sub: "أهم 20 كود احترافي في Unity C#",
+                items: [
+                    { t: "1. تحريك اللاعب (Movement)", d: "تحريك الشخصية بالأسهم أو WASD.", s: "يقرأ مدخلات لوحة المفاتيح ويحرك الكائن في الاتجاهات الأربعة.", c: "float x = Input.GetAxis(\"Horizontal\");\nfloat z = Input.GetAxis(\"Vertical\");\ntransform.Translate(new Vector3(x,0,z) * speed * Time.deltaTime);" },
+                    { t: "2. قفز اللاعب (Jump)", d: "دفع اللاعب للأعلى باستخدام الفيزياء.", s: "يستخدم مكون Rigidbody لتطبيق قوة دفع لحظية لأعلى.", c: "if(Input.GetKeyDown(KeyCode.Space)) {\n    rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);\n}" },
+                    { t: "3. تتبع الكاميرا (Camera Follow)", d: "جعل الكاميرا تلاحق اللاعب بسلاسة.", s: "يحدث موقع الكاميرا في دالة LateUpdate بعد حركة اللاعب.", c: "void LateUpdate() {\n    transform.position = player.position + offset;\n}" },
+                    { t: "4. تجميع العملات (Collectibles)", d: "التقاط العناصر عند لمسها.", s: "يتحقق من وسم (Tag) العملة ويحذفها من المشهد.", c: "void OnTriggerEnter(Collider other) {\n    if(other.CompareTag(\"Coin\")) { Destroy(other.gameObject); score++; }\n}" },
+                    { t: "5. الانتقال بين المراحل (Load Scene)", d: "فتح مستوى جديد أو شاشة الفوز.", s: "يستدعي مكتبة SceneManagement لتحميل المشهد التالي.", c: "using UnityEngine.SceneManagement;\nSceneManager.LoadScene(\"Level2\");" },
+                    { t: "6. ذكاء العدو لملاحقة اللاعب (Enemy AI)", d: "تحريك العدو نحو موقع اللاعب.", s: "يستخدم دالة MoveTowards لتقريب المسافة تدريجياً.", c: "transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);" },
+                    { t: "7. إطلاق الرصاص (Shooting)", d: "إنشاء مقذوفات من فوهة السلاح.", s: "يستنسخ Prefab الرصاصة عند الضغط على زر الإطلاق.", c: "if(Input.GetButtonDown(\"Fire1\")) {\n    Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);\n}" },
+                    { t: "8. الجري السريع (Sprinting)", d: "مضاعفة سرعة اللاعب عند الضغط على Shift.", s: "يغير قيمة متغير السرعة طالما الزر مضغوط.", c: "float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;" },
+                    { t: "9. توليد الأعداء تلقائياً (Spawner)", d: "إظهار أعداء كل فترة زمنية محددة.", s: "يستخدم InvokeRepeating لتكرار دالة التوليد.", c: "void Start() { InvokeRepeating(\"Spawn\", 1f, 3f); }" },
+                    { t: "10. نظام الصحة والضرر (Health System)", d: "خصم نقاط الحياة عند الإصابة.", s: "يتحقق إذا وصلت الصحة لصفر لتنتهي اللعبة.", c: "public void TakeDamage(int dmg) {\n    health -= dmg;\n    if(health <= 0) Die();\n}" },
+                    { t: "11. تدوير الكائنات باستمرار (Rotate)", d: "تدوير العملات أو المراوح في اللعبة.", s: "يضيف زاوية دوران في كل إطار (Frame).", c: "void Update() { transform.Rotate(0, 100 * Time.deltaTime, 0); }" },
+                    { t: "12. إيقاف اللعبة مؤقتاً (Pause Game)", d: "تجميد الوقت عند فتح قائمة الإعدادات.", s: "يضبط مقياس الوقت Time.timeScale على صفر.", c: "Time.timeScale = 0f; // للإيقاف\nTime.timeScale = 1f; // للاستئناف" },
+                    { t: "13. تشغيل المؤثرات الصوتية (Play Sound)", d: "إصدار صوت عند القفز أو الفوز.", s: "يستخدم AudioSource لتشغيل مقطع صوتي لمرة واحدة.", c: "audioSource.PlayOneShot(jumpClip);" },
+                    { t: "14. المؤقت التنازلي (Countdown Timer)", d: "حساب الوقت المتبقي لإنهاء المرحلة.", s: "يطرح Time.deltaTime من الوقت الكلي في كل ثانية.", c: "if(timeRemaining > 0) timeRemaining -= Time.deltaTime;" },
+                    { t: "15. حفظ أعلى نتيجة (Save HighScore)", d: "تخزين نقاط اللاعب حتى بعد غلق اللعبة.", s: "يستخدم PlayerPrefs لحفظ البيانات في ذاكرة الجهاز.", c: "PlayerPrefs.SetInt(\"HighScore\", score);\nint saved = PlayerPrefs.GetInt(\"HighScore\");" },
+                    { t: "16. إخفاء وإظهار المؤشر (Cursor Lock)", d: "قفل مؤشر الماوس في ألعاب التصويب FPS.", s: "يخفي السهم ويثبته في منتصف الشاشة.", c: "Cursor.lockState = CursorLockMode.Locked;" },
+                    { t: "17. التدمير التلقائي بعد وقت (Auto Destroy)", d: "حذف الرصاصة أو الانفجار بعد ثوانٍ.", s: "يمرر مدة الانتظار كمعامل ثانٍ لدالة Destroy.", c: "Destroy(gameObject, 3f);" },
+                    { t: "18. شعاع الليزر لاكتشاف الأهداف (Raycast)", d: "إطلاق شعاع غير مرئي لمعرفة ما أمام اللاعب.", s: "مفيد جداً للتصويب الدقيق والتفاعل مع الأبواب.", c: "if(Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 10f)) { }" },
+                    { t: "19. تغيير لون المجسم برمجياً (Change Color)", d: "تغيير لون العدو للأحمر عند إصابته.", s: "يصل لمكون MeshRenderer ويعدل لون الخامة.", c: "GetComponent<Renderer>().material.color = Color.red;" },
+                    { t: "20. الخروج من اللعبة (Quit Game)", d: "إغلاق التطبيق عند الضغط على زر الخروج.", s: "يعمل في النسخة النهائية المستخرجة من اللعبة.", c: "Application.Quit();" }
+                ]
+            },
+            {
+                id: "space", icon: "🌌", title: "3. عالم الفلك والفضاء", color: "#c084fc", sub: "20 حقيقة مذهلة عن الكون والنجوم",
+                items: [
+                    { t: "1. الثقوب السوداء (Black Holes)", d: "وحوش الجاذبية في الكون.", s: "منطقة ذات جاذبية خارقة تبتلع كل شيء يقترب منها، حتى الضوء نفسه لا يستطيع الهروب!", c: "" },
+                    { t: "2. سرعة الضوء الخارقة", d: "أسرع شيء في الكون المعروف.", s: "يسير الضوء بسرعة 300,000 كيلومتر في الثانية الواحدة، أي يدور حول الأرض 7 مرات ونصف في ثانية!", c: "" },
+                    { t: "3. كوكب المشتري العملاق", d: "أكبر كواكب مجموعتنا الشمسية.", s: "حجمه ضخم لدرجة أنه يتسع لأكثر من 1,300 كرة أرضية بداخله، ويعمل كدرع يحمي الأرض من النيازك.", c: "" },
+                    { t: "4. يوم على كوكب الزهرة أطول من سنته!", d: "دوران بطيء جداً حول نفسه.", s: "يستغرق الزهرة 243 يوماً أرضياً ليدور حول نفسه، بينما يدور حول الشمس في 225 يوماً فقط!", c: "" },
+                    { t: "5. الصمت التام في الفضاء", d: "لا يوجد صوت في الفضاء الخارجي.", s: "لأن الفضاء فراغ شبه تام ولا يوجد هواء ينقل موجات الصوت، لذا يتواصل الرواد باللاسلكي.", c: "" },
+                    { t: "6. مجرة درب التبانة", d: "موطننا في هذا الكون الفسيح.", s: "مجرة حلزونية تحتوي على أكثر من 200 مليار نجم، وشمسنا مجرد نجم متوسط فيها.", c: "" },
+                    { t: "7. حلقات كوكب زحل الساحرة", d: "ليست صلبة كما تبدو من بعيد.", s: "تتكون من مليارات القطع من الجليد والصخور والغبار التي تدور حول الكوكب بسرعة هائلة.", c: "" },
+                    { t: "8. النجم النيوتروني فائق الكثافة", d: "بقايا انفجار النجوم العملاقة.", s: "ملعقة صغيرة واحدة من مادة النجم النيوتروني تزن أكثر من مليار طن على الأرض!", c: "" },
+                    { t: "9. آثار أقدام الرواد على القمر", d: "ستبقى لملايين السنين!", s: "لأن القمر لا يمتلك غلافاً جوياً ولا رياحاً ولا أمطاراً تمحو هذه الآثار.", c: "" },
+                    { t: "10. الشمس تبتلع 99.8% من كتلة المجموعة", d: "نجمنا العملاق الذي يمنحنا الحياة.", s: "تشكل الشمس وحدها 99.86% من إجمالي كتلة النظام الشمسي بكل كواكبه وأقماره.", c: "" },
+                    { t: "11. كوكب المريخ الكوكب الأحمر", d: "سبب لونه هو الصدأ!", s: "تغطي تربته كميات هائلة من أكسيد الحديد (الصدأ)، وبه أعلى بركان في المجموعة الشمسية (أوليمبوس مونس).", c: "" },
+                    { t: "12. الشفق القطبي (أضواء السماء)", d: "لوحة فنية ترسمها الشمس.", s: "يحدث عندما تصطدم الرياح الشمسية المشحونة بالمجال المغناطيسي للأرض عند القطبين.", c: "" },
+                    { t: "13. السنة الضوئية وحدة مسافة وليست زمناً", d: "تستخدم لقياس المسافات بين النجوم.", s: "هي المسافة التي يقطعها الضوء في سنة كاملة، وتساوي حوالي 9.5 تريليون كيلومتر.", c: "" },
+                    { t: "14. كوكب أورانوس يتدحرج على جانبه", d: "ميل محوره يصل إلى 98 درجة.", s: "يُعتقد أن جسماً عملاقاً اصطدم به قديماً فجعله يدور حول الشمس وكأنه كرة تتدحرج.", c: "" },
+                    { t: "15. السديم (حضانات النجوم)", d: "سحب عملاقة من الغاز والغبار.", s: "تتجمع فيها الغازات بفعل الجاذبية لتولد نجوم وكواكب جديدة عبر ملايين السنين.", c: "" },
+                    { t: "16. نجم الشمال (الجدي) الثابت", d: "بوصلة المسافرين عبر التاريخ.", s: "يقع فوق القطب الشمالي للأرض مباشرة، لذلك يبدو ثابتاً في السماء بينما تدور باقي النجوم حوله.", c: "" },
+                    { t: "17. كويكب سيريس في حزام الكويكبات", d: "أكبر جسم بين المريخ والمشتري.", s: "يُصنف ككوكب قزم ويشكل وحده ثلث كتلة حزام الكويكبات بالكامل.", c: "" },
+                    { t: "18. محطة الفضاء الدولية (ISS)", d: "مختبر علمي يطير فوق رؤوسنا.", s: "تدور حول الأرض بسرعة 28,000 كم/ساعة، وتكمل دورة كاملة حول الأرض كل 90 دقيقة!", c: "" },
+                    { t: "19. المستعر الأعظم (سوبرنوفا)", d: "أقوى انفجار في الكون.", s: "يحدث في نهاية حياة النجوم الضخمة، ويضيء لفترة قصيرة أكثر من مجرة كاملة.", c: "" },
+                    { t: "20. تلسكوب جيمس ويب الفضائي", d: "آلة زمن ترى ماضي الكون.", s: "يلتقط الضوء القادم من مجرات تشكلت منذ أكثر من 13 مليار سنة بدقة مذهلة.", c: "" }
+                ]
+            },
+            {
+                id: "physics", icon: "⚡", title: "4. عالم الفيزياء والتجارب", color: "#0ea5e9", sub: "20 قانون وتجربة فيزيائية مدهشة",
+                items: [
+                    { t: "1. الكوب المقلوب والضغط الجوي", d: "الماء يتحدى الجاذبية أمام عينيك.", s: "املأ كوباً بالماء وغطه بورقة مقواة واقلبه؛ ضغط الهواء من الأسفل أقوى من وزن الماء فيمنع سقوطه.", c: "" },
+                    { t: "2. الشمعة التي ترفع الماء", d: "تغير الضغط الحراري يخلق قوة شفط.", s: "ثبت شمعة مشتعلة في طبق به ماء، وغطها بكوب؛ عند انطفاء الشمعة يبرد الهواء ويقل ضغطه فيرتفع الماء داخل الكوب.", c: "" },
+                    { t: "3. قانون القصور الذاتي لنيوتن", d: "الأجسام الساكنة ترفض الحركة فجأة.", s: "ضع عملة معدنية على ورقة فوق كوب، اسحب الورقة بسرعة خاطفة؛ ستسقط العملة في الكوب ولم تتحرك مع الورقة.", c: "" },
+                    { t: "4. انكسار الضوء (القلم المكسور)", d: "الضوء يغير سرعته بين الهواء والماء.", s: "ضع قلماً في كوب شفاف به ماء؛ سيبدو القلم وكأنه مكسور عند سطح الماء بسبب انكسار الأشعة الضوئية.", c: "" },
+                    { t: "5. الكهرباء الساكنة بالبالون", d: "الشحنات الكهربائية تجذب الأجسام الخفيفة.", s: "ادلك بالوناً منفوخاً بشعرك أو بقطعة صوف، ثم قربه من قصاصات ورق صغيرة وستنجذب إليه كالمغناطيس.", c: "" },
+                    { t: "6. قاعدة أرخميدس للطفو", d: "لماذا تطفو السفن العملاقة ويغرق المسمار؟", s: "الجسم يطفو إذا كان وزن الماء الذي يزيحه أكبر من وزنه؛ السفن مجوفة فتزيح كمية ضخمة من الماء.", c: "" },
+                    { t: "7. انتقال الصوت في المواد الصلبة", d: "الصوت أسرع في المعادن منه في الهواء.", s: "اربط خيطين في ملعقة معدنية، ضع طرفي الخيط في أذنيك واطرق الملعقة؛ ستسمع صوتاً كجرس الكنيسة الضخم!", c: "" },
+                    { t: "8. برج الكثافات السائلة", d: "السوائل المختلفة تترتب حسب كثافتها.", s: "اسكب في كوب عسلاً ثم ماءً ملوناً ثم زيتاً؛ ستستقر في 3 طبقات منفصلة تماماً دون أن تختلط.", c: "" },
+                    { t: "9. البيضة التي تطفو في الماء المالح", d: "الملح يزيد من كثافة الماء.", s: "تغرق البيضة في الماء العذب، لكن عند إضافة 4 ملاعق كبيرة من الملح تزداد كثافة الماء فتطفو البيضة.", c: "" },
+                    { t: "10. سرعة سقوط الأجسام (تجربة جاليليو)", d: "الجاذبية تسحب الجميع بنفس التسارع.", s: "في غياب مقاومة الهواء، تسقط الريشة والكرة الحديدية وتصلان للأرض في نفس اللحظة تماماً.", c: "" },
+                    { t: "11. المغناطيس الكهربائي البسيط", d: "الكهرباء تولد مجالاً مغناطيسياً.", s: "لف سلكاً نحاسياً معزولاً حول مسمار حديدي ووصل طرفيه ببطارية صغيرة؛ سيتحول المسمار لمغناطيس يجذب الدبابيس.", c: "" },
+                    { t: "12. مبدأ الفعل ورد الفعل", d: "القانون الثالث لنيوتن في حركة الصواريخ.", s: "انفخ بالوناً واتركه دون ربطه؛ يندفع الهواء للخلف فينطلق البالون للأمام بقوة مساوية.", c: "" },
+                    { t: "13. التوتر السطحي للماء", d: "سطح الماء يعمل كغشاء مطاطي مشدود.", s: "يمكنك وضع دبوس معدني صغير برفق شديد على سطح الماء ليطفو دون أن يغرق بفضل تماسك جزيئات السطح.", c: "" },
+                    { t: "14. ظاهرة الرنين الصوتي", d: "تطابق الترددات يضخم الاهتزاز.", s: "مرر إصبعك المبلل على حافة كأس زجاجي رقيق؛ سيصدر نغمة موسيقية صافية نتيجة اهتزاز الزجاج.", c: "" },
+                    { t: "15. المرايا المقعرة وتجميع الضوء", d: "تركيز أشعة الشمس في نقطة واحدة.", s: "تجمع العدسة المحدبة أو المرآة المقعرة أشعة الشمس في بؤرة ساخنة جداً قادرة على إشعال ورقة.", c: "" },
+                    { t: "16. الاحتكاك وتوليد الحرارة", d: "تحويل الطاقة الحركية لطاقة حرارية.", s: "افرك يديك ببعضهما بسرعة لمدة 15 ثانية؛ ستشعر بدفء واضح ناتج عن قوة الاحتكاك.", c: "" },
+                    { t: "17. البندول البسيط وحفظ الطاقة", d: "تبادل مستمر بين طاقة الوضع والحركة.", s: "اربط ثقلاً بخيط وحركه؛ عند أعلى نقطة يمتلك طاقة وضع قصوى، وعند المنتصف طاقة حركة قصوى.", c: "" },
+                    { t: "18. تمدد المعادن بالحرارة", d: "الحرارة تباعد بين جزيئات المادة.", s: "لذلك يترك المهندسون فواصل صغيرة بين قضبان السكك الحديدية حتى لا تلتوي في حر الصيف.", c: "" },
+                    { t: "19. ظاهرة السراب في الصحراء", d: "انكسار الضوء عبر طبقات الهواء الساخن.", s: "يسخن الهواء الملامس للأرض فتقل كثافته، فينكسر ضوء السماء للأعلى ويبدو للمسافر وكأنه بركة ماء.", c: "" },
+                    { t: "20. النسبية وتمدد الزمن لأينشتاين", d: "الوقت ليس ثابتاً للجميع!", s: "كلما تحركت بسرعة تقترب من سرعة الضوء، يمر الوقت عليك أبطأ مقارنة بشخص واقف على الأرض.", c: "" }
+                ]
+            },
+            {
+                id: "chemistry", icon: "🧪", title: "5. عالم الكيمياء والسحر", color: "#22c55e", sub: "20 تفاعل وتجربة كيميائية آمنة",
+                items: [
+                    { t: "1. البركان المنزلي الفائر", d: "تفاعل حمض مع قاعدة ينتج غازاً.", s: "ضع بيكربونات الصوديوم مع قطرة صابون سائل ولون طعام، ثم اسكب الخل؛ ستفور رغوة بركانية كثيفة من غاز CO2.", c: "" },
+                    { t: "2. الحبر السري بالليمون", d: "الأكسدة الحرارية تكشف الرسائل المخفية.", s: "اكتب بعود قطن مبلل بعصير الليمون على ورقة، وعندما تجف قربها بحذر من مصدر حراري لتظهر الكتابة باللون البني.", c: "" },
+                    { t: "3. تنظيف العملات النحاسية", d: "إزالة طبقة أكسيد النحاس الداكنة.", s: "انقع عملة نحاسية قديمة في خليط من الخل والملح لمدة 5 دقائق؛ ستعود لامعة كالجديدة تماماً.", c: "" },
+                    { t: "4. نفخ البالون بدون فم!", d: "توليد غاز ثاني أكسيد الكربون داخل زجاجة.", s: "ضع خلاً في زجاجة وبيكربونات داخل بالون، ثبت البالون على فوهة الزجاجة واقلبه؛ سينتفخ البالون ذاتياً.", c: "" },
+                    { t: "5. البيضة المطاطية (بدون قشرة)", d: "الخل يذيب كربونات الكالسيوم.", s: "ضع بيضة نيئة في كوب خل لمدة يومين؛ ستذوب القشرة الصلبة وتبقى البيضة محاطة بغشاء مرن تقفز كالكرة!", c: "" },
+                    { t: "6. السائل العجيب (أوبليك)", d: "سائل غير نيوتوني يتصرف كصلب وسائل معاً!", s: "اخلط كوبين من نشا الذرة مع كوب ماء؛ إذا ضربته بيدك يصبح صلباً كالحجر، وإذا تركته ينساب كالماء.", c: "" },
+                    { t: "7. كاشف الأحماض بالملفوف الأحمر", d: "تغير الألوان حسب درجة الحموضة (pH).", s: "اغلي أوراق الملفوف الأحمر وخذ ماءه البنفسجي؛ يتحول للأحمر مع الليمون، وللأخضر مع الصابون!", c: "" },
+                    { t: "8. مصباح الحمم البركانية (Lava Lamp)", d: "الزيت والماء لا يمتزجان والفوار يحركهما.", s: "املأ زجاجة بـ 3/4 زيت و 1/4 ماء ملون، ثم ضع قرصاً فواراً؛ ستصعد فقاعات ملونة ساحرة وتهبط باستمرار.", c: "" },
+                    { t: "9. معجون أسنان الفيل (التفاعل السريع)", d: "تحلل سريع ينتج رغوة دافئة عملاقة.", s: "تفاعل الخميرة المذابة في ماء دافئ مع ماء الأكسجين والصابون ينتج عموداً ضخماً من الرغوة.", c: "" },
+                    { t: "10. صدأ الحديد (الأكسدة البطيئة)", d: "اتحاد الحديد مع الأكسجين في وجود الرطوبة.", s: "يؤدي لتكون طبقة هشة بنية اللون، ولذلك تُطلى الجسور والسيارات لحمايتها من الهواء والماء.", c: "" },
+                    { t: "11. البلورات السكرية (Rock Candy)", d: "التبلور من المحلول فوق المشبع.", s: "أذب كمية كبيرة من السكر في ماء مغلي، علق خيطاً فيه واتركه أياماً؛ ستنمو بلورات سكرية هندسية رائعة.", c: "" },
+                    { t: "12. لماذا يبكي الإنسان عند تقطيع البصل؟", d: "البصل يطلق غازاً دفاعياً كيميائياً.", s: "عند قطع خلايا البصل يتكون غاز يتفاعل مع دموع العين مكوناً حمضاً خفيفاً يسبب الحرقة.", c: "" },
+                    { t: "13. الماس والجرافيت (نفس العنصر!)", d: "كلاهما يتكون من الكربون النقي فقط.", s: "الفرق الوحيد هو ترتيب الذرات؛ في الماس مترابطة بقوة ثلاثية الأبعاد، وفي قلم الرصاص طبقات تنزلق.", c: "" },
+                    { t: "14. غاز الهيليوم وتغيير الصوت", d: "غاز أخف من الهواء بـ 7 مرات.", s: "لأن سرعة الصوت في الهيليوم أعلى من الهواء، تهتز الأحبال الصوتية أسرع فيبدو الصوت رفيعاً ومضحكاً.", c: "" },
+                    { t: "15. كيمياء الصابون وطرد الدهون", d: "جزيئات الصابون لها رأسان مختلفان.", s: "رأس يمسك بالدهون والأوساخ، ورأس آخر يمسك بالماء، فيسحب الماء الأوساخ بعيداً عن يديك.", c: "" },
+                    { t: "16. الألعاب النارية وألوانها", d: "كل عنصر كيميائي يحترق بلون مميز.", s: "الصوديوم يعطي اللون الأصفر، النحاس يعطي الأزرق، والسترونتيوم يعطي الأحمر الساطع.", c: "" },
+                    { t: "17. الثلج الجاف (التسامي المباشر)", d: "ثاني أكسيد الكربون المتجمد عند -78 درجة.", s: "يتحول من الحالة الصلبة إلى الغازية مباشرة دون أن يمر بالحالة السائلة، مكوناً دخاناً كثيفاً.", c: "" },
+                    { t: "18. تحول التفاح للون البني", d: "تفاعل الإنزيمات مع أكسجين الهواء.", s: "يمكن منع ذلك بعصر قطرات من الليمون على التفاح لأن فيتامين C يمنع الأكسدة.", c: "" },
+                    { t: "19. الماء هو المذيب العام", d: "يذيب مواد أكثر من أي سائل آخر.", s: "بسبب قطبية جزيئاته (موجب من جهة وسالب من جهة)، يستطيع تفكيك الأملاح والسكريات بسهولة.", c: "" },
+                    { t: "20. الجدول الدوري لمندليف", d: "خريطة العناصر الكيميائية في الكون.", s: "يرتب العناصر الـ 118 حسب عدد البروتونات في نواتها وخصائصها المتشابهة.", c: "" }
+                ]
+            },
+            {
+                id: "ai", icon: "🤖", title: "6. عالم الذكاء الاصطناعي", color: "#f43f5e", sub: "20 تقنية من المستقبل وتعلم الآلة",
+                items: [
+                    { t: "1. الشبكات العصبية (Neural Networks)", d: "تقليد طريقة عمل دماغ الإنسان.", s: "تتكون من طبقات حسابية تتعلم اكتشاف الأنماط من ملايين الأمثلة تماماً كالخلايا العصبية.", c: "" },
+                    { t: "2. الرؤية الحاسوبية (Computer Vision)", d: "تعليم الكمبيوتر كيف يرى ويفهم الصور.", s: "تُستخدم في السيارات ذاتية القيادة لقراءة إشارات المرور وتجنب المشاة.", c: "" },
+                    { t: "3. معالجة اللغات الطبيعية (NLP)", d: "فهم وتوليد اللغة البشرية.", s: "هي التقنية التي تجعل المساعدات الذكية تفهم أسئلتك وترد عليك بطلاقة.", c: "" },
+                    { t: "4. التعلم العميق (Deep Learning)", d: "فرع متطور من تعلم الآلة.", s: "يستخدم شبكات ضخمة جداً للتعرف على الأصوات، الترجمة الفورية، وتشخيص الأمراض.", c: "" },
+                    { t: "5. التعلم المعزز (Reinforcement Learning)", d: "التعلم بالتجربة والخطأ والمكافأة.", s: "هكذا يتعلم الذكاء الاصطناعي هزيمة أبطال العالم في الشطرنج والألعاب الإلكترونية.", c: "" },
+                    { t: "6. الذكاء الاصطناعي التوليدي (Generative AI)", d: "ابتكار نصوص وصور وأكواد جديدة.", s: "لا يكتفي بتحليل البيانات بل يبدع محتوى جديداً تماماً بناءً على وصفك.", c: "" },
+                    { t: "7. التزييف العميق (Deepfake)", d: "دمج الوجوه والأصوات بدقة عالية.", s: "تقنية قوية تُستخدم في السينما، لكن يجب الحذر منها للتحقق من مصداقية الفيديوهات.", c: "" },
+                    { t: "8. الروبوتات البشرية (Humanoids)", d: "آلات تحاكي حركة وجسم الإنسان.", s: "تُصمم للمساعدة في المصانع، المستشفيات، واستكشاف البيئات الخطرة.", c: "" },
+                    { t: "9. اختبار تورينج (Turing Test)", d: "مقياس ذكاء الآلة منذ عام 1950.", s: "ينجح الكمبيوتر في الاختبار إذا تحدث مع إنسان ولم يستطع الإنسان معرفة أنه يتحدث مع آلة.", c: "" },
+                    { t: "10. البيانات الضخمة (Big Data)", d: "الوقود الذي يغذي الذكاء الاصطناعي.", s: "كلما زادت جودة وحجم البيانات التي يتدرب عليها النموذج، زادت دقته وذكاؤه.", c: "" },
+                    { t: "11. أنظمة التوصية الذكية", d: "كيف يعرف يوتيوب ما تحب مشاهدته؟", s: "خوارزميات تحلل اهتماماتك ومدة مشاهدتك لتقترح عليك الفيديوهات والألعاب الأنسب لك.", c: "" },
+                    { t: "12. الذكاء الاصطناعي في الطب", d: "اكتشاف الأمراض قبل ظهور أعراضها.", s: "يستطيع تحليل صور الأشعة بدقة تفوق العين البشرية أحياناً.", c: "" },
+                    { t: "13. الترجمة الفورية بالصوت", d: "كسر حاجز اللغة بين البشر.", s: "تطبيقات تسمع كلامك بالعربية وتنطقه فوراً بلغة أخرى بنفس نبرة صوتك.", c: "" },
+                    { t: "14. الذكاء الاصطناعي في تصميم الألعاب", d: "شخصيات NPC تتصرف بذكاء حقيقي.", s: "بدلاً من الحركات المبرمجة الثابتة، يتعلم الأعداء أسلوب لعبك ويغيرون خططهم.", c: "" },
+                    { t: "15. المدن الذكية (Smart Cities)", d: "إدارة المرور والطاقة بالذكاء الاصطناعي.", s: "تتحكم الإشارات في تدفق السيارات تلقائياً لتقليل الزحام وتوفير الوقود.", c: "" },
+                    { t: "16. الحوسبة الكمومية (Quantum Computing)", d: "ثورة خارقة في سرعة المعالجات.", s: "تستخدم الكيوبت بدلاً من البت العادي لحل مسائل معقدة في ثوانٍ بدلاً من آلاف السنين.", c: "" },
+                    { t: "17. الواقع المعزز (AR) والافتراضي (VR)", d: "دمج العالم الرقمي بالحقيقي.", s: "نظارات تنقلك لعالم ثلاثي الأبعاد بالكامل أو تضع مجسمات رقمية في غرفتك.", c: "" },
+                    { t: "18. إنترنت الأشياء (IoT)", d: "توصيل أجهزة المنزل بالإنترنت.", s: "تحكم في الإضاءة والتكييف والأقفال من هاتفك أو بصوتك من أي مكان.", c: "" },
+                    { t: "19. أخلاقيات الذكاء الاصطناعي", d: "وضع قوانين لضمان أمان التكنولوجيا.", s: "التأكد من استخدام الذكاء الاصطناعي في الخير وحماية خصوصية البشر.", c: "" },
+                    { t: "20. هندسة الأوامر (Prompt Engineering)", d: "فن التحدث مع الذكاء الاصطناعي.", s: "صياغة طلبات دقيقة ومنظمة للحصول على أفضل النتائج البرمجية والإبداعية.", c: "" }
+                ]
+            },
+            {
+                id: "psychology", icon: "🧠", title: "7. عالم علم النفس والتفكير", color: "#3b82f6", sub: "20 سر لتقوية العقل والتركيز والثقة",
+                items: [
+                    { t: "1. تقنية بومودورو (25 دقيقة)", d: "أقوى سر للمذاكرة والعمل بدون ملل.", s: "ركز تماماً لمدة 25 دقيقة ثم خذ راحة 5 دقائق؛ بعد 4 جولات خذ راحة طويلة 20 دقيقة.", c: "" },
+                    { t: "2. قاعدة الثواني الـ 5 لميل روبنز", d: "القضاء الفوري على التسويف والكسل.", s: "عندما تتردد في بدء مهمة، عد تنازلياً 5-4-3-2-1 وتحرك فوراً قبل أن يختلق عقلك الأعذار.", c: "" },
+                    { t: "3. تأثير زيجارنيك (Zeigarnik Effect)", d: "العقل يتذكر المهام غير المكتملة.", s: "بمجرد أن تبدأ في المذاكرة أو المشروع لمدة 5 دقائق فقط، سيدفعك عقلك لإكماله تلقائياً.", c: "" },
+                    { t: "4. تقنية فاينمان للتعلم العميق", d: "إذا لم تستطع شرحها ببساطة فأنت لم تفهمها.", s: "اشرح الدرس الذي ذاكرته وكأنك تعلمه لطفل صغير بكلمات بسيطة، وستكتشف أي ثغرة في فهمك.", c: "" },
+                    { t: "5. لغة الجسد والثقة بالنفس", d: "الوقوف باستقامة يغير كيمياء دماغك.", s: "فرد الظهر ورفع الرأس لمدة دقيقتين يقلل هرمون التوتر (الكورتيزول) ويزيد الثقة.", c: "" },
+                    { t: "6. التكرار المتباعد للحفظ الدائم", d: "كيف تمنع نسيان المعلومات؟", s: "راجع المعلومة بعد يوم، ثم بعد 3 أيام، ثم بعد أسبوع، ثم بعد شهر لتنتقل للذاكرة طويلة المدى.", c: "" },
+                    { t: "7. تأثير الهالة (Halo Effect)", d: "الانطباع الأول يدوم طويلاً.", s: "الابتسامة الصادقة والاهتمام بالمظهر واللباقة تجعل الناس يفترضون صفات إيجابية أخرى فيك.", c: "" },
+                    { t: "8. قاعدة الدقيقتين للعادات", d: "اجعل بداية أي عادة سهلة جداً.", s: "إذا أردت قراءة كتاب، اقرأ صفحتين فقط يومياً؛ الاستمرارية أهم من الكمية في البداية.", c: "" },
+                    { t: "9. التنفس العميق لتهدئة التوتر (4-7-8)", d: "إيقاف القلق قبل الامتحان أو المباراة.", s: "استنشق الهواء من أنفك في 4 ثوانٍ، احبسه 7 ثوانٍ، وأخرجه ببطء من فمك في 8 ثوانٍ.", c: "" },
+                    { t: "10. العقلية النامية (Growth Mindset)", d: "الذكاء عضلة تنمو بالتدريب.", s: "لا تقل 'أنا فاشل في هذا'، بل قل 'أنا لم أتقنه بعد'؛ كل خطأ هو خطوة نحو الإتقان.", c: "" },
+                    { t: "11. تعدد المهام وهم يدمر التركيز", d: "العقل لا يفعل شيئين معقدين في نفس اللحظة.", s: "التنقل بين الموبايل والمذاكرة يستهلك طاقة الدماغ؛ أغلق الإشعارات وركز في شيء واحد.", c: "" },
+                    { t: "12. كتابة الأهداف تضاعف تحقيقها", d: "تحويل الأحلام لخطوات ملموسة.", s: "الأشخاص الذين يكتبون أهدافهم على ورق يلتزمون بها بنسبة أعلى بـ 42%.", c: "" },
+                    { t: "13. قوة الامتنان اليومي", d: "تدريب الدماغ على رؤية النعم.", s: "كتابة 3 أشياء جميلة حدثت في يومك قبل النوم ترفع هرمون السعادة وتححسن جودة نومك.", c: "" },
+                    { t: "14. فن الاستماع الفعال", d: "الناس يحبون من يسمعهم باهتمام.", s: "انظر للشخص أثناء حديثه ولا تقاطع لتجهز ردك؛ ستكسب احترام الجميع.", c: "" },
+                    { t: "15. تأثير البيئة المحيطة", d: "أنت متوسط أكثر 5 أشخاص تجلس معهم.", s: "احط نفسك بأصدقاء طموحين ومجتهدين لتنتقل إليك عدوى النجاح والحماس.", c: "" },
+                    { t: "16. التعامل مع الفشل كبيانات", d: "المخترعون يفشلون مئات المرات قبل النجاح.", s: "توماس إديسون قال: 'لم أفشل، بل وجدت 10,000 طريقة لا تعمل'.", c: "" },
+                    { t: "17. قاعدة 80/20 (مبدأ باريتو)", d: "20% من مجهودك يصنع 80% من النتائج.", s: "ركز على أهم الأجزاء والمفاهيم الأساسية في أي مادة أو مهارة قبل التفاصيل الفرعية.", c: "" },
+                    { t: "18. التحدث الإيجابي مع الذات", d: "عقلك الباطن يصدق ما تقوله لنفسك.", s: "استبدل عبارات الإحباط بكلمات تشجيعية؛ فأنت أقوى وأذكى مما تتخيل.", c: "" },
+                    { t: "19. الخرائط الذهنية (Mind Maps)", d: "تنظيم المعلومات بالألوان والفروع.", s: "الدماغ يتذكر الصور والألوان والترابطات أسرع بـ 6 مرات من النصوص الطويلة.", c: "" },
+                    { t: "20. النوم هو وقت ترتيب الذاكرة", d: "السهر يمسح ما ذاكرته!", s: "أثناء النوم العميق يقوم الدماغ بتثبيت المعلومات الجديدة وتنظيف السموم العصبية.", c: "" }
+                ]
+            },
+            {
+                id: "money", icon: "💰", title: "8. عالم المال والأعمال", color: "#10b981", sub: "20 قاعدة في الذكاء المالي وريادة الأعمال",
+                items: [
+                    { t: "1. قاعدة 50 / 30 / 20 للمصروف", d: "أشهر قاعدة عالمية لتقسيم الأموال.", s: "50% للضروريات، 30% للترفيه والهوايات، و20% للادخار للمستقبل.", c: "" },
+                    { t: "2. الفرق بين الأصول والالتزامات", d: "أهم درس في كتاب 'الأب الغني والأب الفقير'.", s: "الأصل هو شيء يضع المال في جيبك (كمهارة أو مشروع)، والالتزام شيء يسحب المال من جيبك.", c: "" },
+                    { t: "3. ادفع لنفسك أولاً", d: "لا تدخر ما يتبقى بعد الصرف!", s: "بمجرد أن تحصل على مال، اخصم جزء الادخار أولاً ثم اصرف من الباقي.", c: "" },
+                    { t: "4. الاستثمار في المهارات", d: "أعلى استثمار ربحاً في سن الشباب.", s: "تعلم البرمجة، التصميم، أو اللغات يرفع قيمتك ويجلب لك دخلاً كبيراً مستقبلاً.", c: "" },
+                    { t: "5. الفائدة المركبة (عجيبة الدنيا الثامنة)", d: "نمو المال الصغير بمرور الوقت.", s: "المبالغ الصغيرة التي تدخرها وتستثمرها بانتظام تتضاعف بشكل مذهل مع السنوات.", c: "" },
+                    { t: "6. كيف تبدأ مشروعاً صغيراً؟", d: "ابحث عن مشكلة وحلها للناس.", s: "كل مشروع ناجح بدأ بفكرة بسيطة تخدم احتياجاً حقيقياً لدى المحيطين بك.", c: "" },
+                    { t: "7. الفرق بين السعر والقيمة", d: "السعر هو ما تدفعه، والقيمة ما تحصل عليه.", s: "المشتري الذكي لا يشتري الشيء لمجرد أنه رخيص، بل يقارن جودته وفائدته.", c: "" },
+                    { t: "8. قاعدة الانتظار 24 ساعة قبل الشراء", d: "تجنب الشراء العاطفي المتسرع.", s: "إذا أعجبتك لعبة أو غرض غير ضروري، انتظر يوماً كاملاً؛ ستكتشف غالباً أنك لست بحاجة إليه.", c: "" },
+                    { t: "9. صندوق الطوارئ المالي", d: "شبكة أمان تحميك من المفاجآت.", s: "وجود مبلغ مدخر جانباً يمنحك راحة بال وثقة في مواجهة أي ظرف طارئ.", c: "" },
+                    { t: "10. التسويق وبناء السمعة", d: "العميل السعيد يجلب لك 10 عملاء.", s: "الأمانة والجودة في العمل هما أقوى دعاية مجانية لأي مشروع ناجح.", c: "" },
+                    { t: "11. العمل الحر (Freelancing)", d: "العمل من المنزل عبر الإنترنت.", s: "يمكنك تقديم خدماتك في البرمجة أو المونتاج أو الترجمة لعملاء من كل العالم.", c: "" },
+                    { t: "12. تنويع مصادر الدخل", d: "لا تضع كل البيض في سلة واحدة.", s: "الاعتماد على مصدر واحد محفوف بالمخاطر؛ تعلم بناء أكثر من مهارة ومصدر.", c: "" },
+                    { t: "13. فهم العرض والطلب", d: "المحرك الأساسي لأسعار السوق.", s: "عندما يقل المعروض ويزداد الطلب يرتفع السعر، والعكس صحيح.", c: "" },
+                    { t: "14. التفاوض الذكي", d: "فن الوصول لاتفاق يرضي الطرفين.", s: "استمع جيداً للطرف الآخر واعرف احتياجاته لتقدم عرضاً لا يُرفض.", c: "" },
+                    { t: "15. التضخم وقوة المال الشرائية", d: "لماذا ترتفع الأسعار بمرور السنين؟", s: "تخزين النقود دون استثمار يقلل من قيمتها بمرور الوقت بسبب ارتفاع الأسعار.", c: "" },
+                    { t: "16. العمل الجماعي وبناء الفريق", d: "يد واحدة لا تصفق في المشاريع الكبرى.", s: "ابحث عن شركاء يكملون مهاراتك (مبرمج + مصمم + مسوق).", c: "" },
+                    { t: "17. التجارة الإلكترونية (E-Commerce)", d: "متجرك المفتوح 24 ساعة للعالم.", s: "بيع المنتجات الرقمية أو الملموسة عبر الإنترنت بأقل تكلفة تأسيس.", c: "" },
+                    { t: "18. إدارة الوقت هي إدارة المال", d: "الوقت هو المورد الوحيد الذي لا يُعوض.", s: "استثمار ساعة يومياً في التعلم يصنع فارقاً هائلاً خلال عام واحد.", c: "" },
+                    { t: "19. التبرع والصدقة تبارك المال", d: "العطاء يفتح أبواب الرزق والسعادة.", s: "تخصيص جزء بسيط لمساعدة المحتاجين ينشر الخير في المجتمع.", c: "" },
+                    { t: "20. القراءة المستمرة في المال والأعمال", d: "العقلية المالية تُبنى بالمعرفة.", s: "قراءة تجارب رواد الأعمال تختصر عليك سنوات من الأخطاء.", c: "" }
+                ]
+            },
+            {
+                id: "health", icon: "🌿", title: "9. عالم الصحة واللياقة", color: "#ec4899", sub: "20 سر لبناء جسم قوي وصحة حديدية",
+                items: [
+                    { t: "1. دورة النوم المثالية (90 دقيقة)", d: "استيقظ نشيطاً بدون خمول الصباح.", s: "النوم يتكون من دورات كل منها 90 دقيقة؛ النوم 7.5 أو 9 ساعات يجعلك تستيقظ في نهاية الدورة.", c: "" },
+                    { t: "2. شرب الماء فور الاستيقاظ", d: "تشغيل محركات الجسم بعد ساعات النوم.", s: "كوبان من الماء صباحاً ينشطان الدورة الدموية والمخ ويطردان السموم.", c: "" },
+                    { t: "3. البروتين لبناء العضلات والنمو", d: "حجر الأساس لخلايا الجسم.", s: "يتوفر بكثرة في البيض، الدجاج، السمك، اللبن، والبقوليات كالفول والعدس.", c: "" },
+                    { t: "4. الكربوهيدرات المعقدة للطاقة", d: "وقود طويل الأمد بدون هبوط مفاجئ.", s: "اختر الشوفان، الخبز الأسمر، والأرز البني بدلاً من السكريات والحلويات السريعة.", c: "" },
+                    { t: "5. تمارين الوزن الذاتي (Calisthenics)", d: "ابنِ قوة خارقة بدون الذهاب للجيم.", s: "تمارين الضغط (Push-ups)، العقلة، والسكوات تبني عضلات قوية وتوازناً مذهلاً.", c: "" },
+                    { t: "6. قاعدة 20-20-20 لحماية العين", d: "ضرورية لكل من يجلس أمام الشاشات.", s: "كل 20 دقيقة، انظر لشيء يبعد 20 قدماً (6 أمتار) لمدة 20 ثانية لإراحة عضلات العين.", c: "" },
+                    { t: "7. فيتامين D من أشعة الشمس", d: "مقوي العظام والمناعة والمزاج.", s: "التعرض للشمس الصباحية لمدة 15 دقيقة يومياً يمنح جسمك حاجته من فيتامين D.", c: "" },
+                    { t: "8. الإحماء قبل الرياضة (Warm-up)", d: "حماية العضلات والمفاصل من الإصابات.", s: "5 دقائق من الحركة الخفيفة والإطالة تهيئ القلب والعضلات للمجهود البدني.", c: "" },
+                    { t: "9. مخاطر المشروبات الغازية والطاقة", d: "قنابل سكر تضر العظام والأسنان.", s: "استبدلها بالعصائر الطبيعية، الماء، أو الحليب لتدعم نموك الرياضي.", c: "" },
+                    { t: "10. الدهون الصحية مفيدة للمخ", d: "60% من دماغ الإنسان يتكون من دهون!", s: "توجد الدهون الصحية (أوميجا 3) في الأسماك، المكسرات، وزيت الزيتون.", c: "" },
+                    { t: "11. الجلوس الصحيح أمام الكمبيوتر", d: "حماية العمود الفقري من التقوس.", s: "اجعل الشاشة في مستوى عينيك، وظهرك مسنوداً، وقدميك ملامستين للأرض.", c: "" },
+                    { t: "12. المشي 10,000 خطوة يومياً", d: "أبسط وأقوى رياضة للقلب.", s: "يحرق الدهون، يحسن الهضم، ويصفي الذهن من التوتر.", c: "" },
+                    { t: "13. غسل اليدين بالماء والصابون", d: "خط الدفاع الأول ضد الفيروسات.", s: "فرك اليدين لمدة 20 ثانية يقضي على 99% من الجراثيم المسببة للأمراض.", c: "" },
+                    { t: "14. تناول الخضروات والفواكه الملونة", d: "كل لون يمثل فيتامينات ومضادات أكسدة.", s: "اجعل طبقك يشبه قوس قزح للحصول على مناعة حديدية.", c: "" },
+                    { t: "15. تجنب الأكل قبل النوم مباشرة", d: "إراحة المعدة لتحسين جودة النوم.", s: "اجعل آخر وجبة قبل النوم بـ 2 إلى 3 ساعات على الأقل.", c: "" },
+                    { t: "16. صحة الأسنان تبدأ من الفرشاة", d: "الوقاية خير من ألم الأسنان.", s: "تنظيف الأسنان مرتين يومياً واستخدام الخيط الطبي يحميها من التسوس.", c: "" },
+                    { t: "17. التنفس من الأنف وليس الفم", d: "الأنف فلتر طبيعي للهواء.", s: "يدفئ الهواء ويرطبه وينقيه من الأتربة قبل وصوله للرئتين.", c: "" },
+                    { t: "18. الضحك يقوي جهاز المناعة", d: "دواء مجاني للجسم والروح.", s: "يقلل هرمونات التوتر ويزيد من تدفق الأكسجين في الجسم.", c: "" },
+                    { t: "19. الاستحمام بالماء الفاتر بعد الرياضة", d: "استشفاء العضلات وتنشيط الجسم.", s: "يساعد على تهدئة ضربات القلب وتنظيف مسام الجلد من العرق.", c: "" },
+                    { t: "20. الاستمرارية هي سر اللياقة", d: "قليل دائم خير من كثير منقطع.", s: "ممارسة الرياضة 30 دقيقة 4 مرات أسبوعياً تغير شكل جسمك وصحتك بالكامل.", c: "" }
+                ]
+            },
+            {
+                id: "cyber", icon: "🛡️", title: "10. عالم الأمن السيبراني", color: "#8b5cf6", sub: "20 درع لحماية حساباتك من الاختراق",
+                items: [
+                    { t: "1. المصادقة الثنائية (2FA)", d: "أقوى قفل لحماية حساباتك.", s: "حتى لو سرق المخترق كلمة مرورك، لن يستطيع الدخول بدون الكود الذي يصل لهاتفك.", c: "" },
+                    { t: "2. كلمات المرور القوية والفريدة", d: "لا تستخدم كلمة سر واحدة لكل المواقع!", s: "اجعل كلمة المرور 12 حرفاً على الأقل وتجمع بين حروف كبيرة وصغيرة وأرقام ورموز.", c: "" },
+                    { t: "3. كشف روابط التصيد (Phishing)", d: "أشهر خدعة لسرقة الحسابات.", s: "لا تضغط على روابط تعدك بجوائز مجانية أو شحن ألعاب؛ تأكد دائماً من اسم الموقع الرسمي.", c: "" },
+                    { t: "4. تحديث النظام والتطبيقات باستمرار", d: "التحديثات تسد الثغرات الأمنية.", s: "المخترقون يستغلون النسخ القديمة؛ حافظ على تحديث هاتفك وويندوز دائماً.", c: "" },
+                    { t: "5. الحذر من شبكات الواي فاي العامة", d: "الشبكات المفتوحة في الكافيهات غير مشفرة.", s: "لا تدخل كلمات مرورك أو بياناتك البنكية وأنت متصل بشبكة واي فاي عامة مفتوحة.", c: "" },
+                    { t: "6. النسخ الاحتياطي للملفات (Backup)", d: "حماية ذكرياتك ومشاريعك من الفقدان.", s: "احتفظ بنسخة من ملفاتك المهمة على فلاشة خارجية أو سحابة إلكترونية (Google Drive).", c: "" },
+                    { t: "7. فيروسات الفدية (Ransomware)", d: "برامج خبيثة تشفر ملفاتك وتطلب مالاً.", s: "تأتي غالباً من تحميل ألعاب وبرامج مقرصنة (كراك) من مواقع غير موثوقة.", c: "" },
+                    { t: "8. الهندسة الاجتماعية (Social Engineering)", d: "اختراق العقول بدلاً من الأجهزة.", s: "لا تعطِ أي كود يصلك في رسالة SMS لأي شخص مهما ادعى أنه من الدعم الفني.", c: "" },
+                    { t: "9. تشفير البيانات (Encryption)", d: "تحويل الرسائل لرموز غير مفهومة.", s: "تطبيقات مثل واتساب تستخدم التشفير التام بحيث لا يقرأ الرسائل إلا المرسل والمستقبل.", c: "" },
+                    { t: "10. التأكد من قفل HTTPS في المتصفح", d: "علامة الأمان في المواقع.", s: "تأكد من وجود علامة القفل بجانب رابط الموقع قبل كتابة أي بيانات شخصية.", c: "" },
+                    { t: "11. صلاحيات التطبيقات على الهاتف", d: "لماذا يطلب تطبيق آلة حاسبة الوصول للكاميرا؟", s: "راجع أذونات التطبيقات واحذف أي تطبيق يطلب صلاحيات لا علاقة لها بوظيفته.", c: "" },
+                    { t: "12. جدار الحماية (Firewall)", d: "حارس البوابة لجهاز الكمبيوتر.", s: "يراقب حركة البيانات الداخلة والخارجة ويمنع الاتصالات المشبوهة تلقائياً.", c: "" },
+                    { t: "13. الهاكر الأخلاقي (White Hat Hacker)", d: "خبراء أمن توظفهم الشركات الكبرى.", s: "يكتشفون الثغرات قبل المجرمين وتدفع لهم شركات مثل جوجل وميكروسوفت مكافآت ضخمة.", c: "" },
+                    { t: "14. البصمة الرقمية (Digital Footprint)", d: "كل ما تنشره على الإنترنت يبقى للأبد.", s: "فكر جيداً قبل نشر صورك أو معلوماتك الشخصية، واجعل حساباتك خاصة.", c: "" },
+                    { t: "15. مدير كلمات المرور (Password Manager)", d: "خزنة رقمية مشفرة لكلماتك.", s: "يحفظ لك عشرات الكلمات الصعبة ويملاها تلقائياً بأمان تام.", c: "" },
+                    { t: "16. الحذر من الفلاشات المجهولة (USB)", d: "قد تحتوي على برمجيات خبيثة تلقائية التشغيل.", s: "افحص أي فلاشة غريبة ببرنامج مكافحة الفيروسات قبل فتح ملفاتها.", c: "" },
+                    { t: "17. حماية حساب الألعاب (Steam / Epic)", d: "حسابات الألعاب هدف مفضل للمخترقين.", s: "اربط حسابك برقم هاتفك وبريد إلكتروني مؤمن ولا تشارك بياناته مع أحد.", c: "" },
+                    { t: "18. تصفح الإنترنت الخفي (Incognito)", d: "يمنع حفظ سجل التصفح على جهازك فقط.", s: "مفيد عند استخدام جهاز عام، وتذكر تسجيل الخروج من حساباتك دائماً.", c: "" },
+                    { t: "19. شبكة VPN وفائدتها", d: "نفق مشفر يخفي عنوان IP الخاص بك.", s: "يحمي خصوصيتك ويشفر اتصالك بالإنترنت.", c: "" },
+                    { t: "20. الوعي الأمني هو أقوى درع", d: "التكنولوجيا وحدها لا تكفي بدون حذرك.", s: "توقف وفكر قبل أن تضغط على أي رابط أو تحمل أي ملف.", c: "" }
+                ]
+            },
+            {
+                id: "history", icon: "🏛️", title: "11. عالم التاريخ والحضارات", color: "#d97706", sub: "20 قصة وحقيقة من أعظم حضارات الأرض",
+                items: [
+                    { t: "1. سر بناء الأهرامات المصرية", d: "أعظم إنجاز هندسي في العالم القديم.", s: "بُني الهرم الأكبر من أكثر من 2.3 مليون حجر بدقة فلكية وهندسية تحير العلماء حتى اليوم.", c: "" },
+                    { t: "2. مكتبة الإسكندرية القديمة", d: "منارة العلم في العالم القديم.", s: "ضمت مئات الآلاف من اللفائف والمخطوطات في كل العلوم وجذبت علماء العالم.", c: "" },
+                    { t: "3. العصر الذهبي للحضارة الإسلامية", d: "قرون من الاختراعات والعلوم.", s: "قدم علماء مثل ابن الهيثم والخوارزمي وابن سينا أسس البصريات والجبر والطب الحديث.", c: "" },
+                    { t: "4. حجر رشيد وفك رموز الهيروغليفية", d: "مفتاح أسرار الفراعنة.", s: "اكتُشف عام 1799 وساعد العالم شامبليون على قراءة اللغة المصرية القديمة بعد آلاف السنين.", c: "" },
+                    { t: "5. سور الصين العظيم", d: "أطول بناء صنعه الإنسان على الأرض.", s: "يمتد لأكثر من 21,000 كيلومتر لحماية الحدود الشمالية للصين القديمة.", c: "" },
+                    { t: "6. اختراع الكتابة المسمارية والورق", d: "بداية تدوين التاريخ البشري.", s: "اخترع المصريون ورق البردي، واخترع السومريون الكتابة لتسجيل القوانين والعلوم.", c: "" },
+                    { t: "7. مدينة البتراء الوردية", d: "مدينة منحوتة بالكامل في الصخر.", s: "بناها الأنباط في الأردن بنظام هندسي مذهل لتجميع مياه الأمطار في الصحراء.", c: "" },
+                    { t: "8. الملك توت عنخ آمون", d: "الفرعون الذهبي الشاب.", s: "اكتُشفت مقبرته كاملة عام 1922 بكنوزها الذهبية المبهرة التي أبهرت العالم.", c: "" },
+                    { t: "9. طريق الحرير التاريخي", d: "شبكة التجارة التي ربطت الشرق بالغرب.", s: "نقل الحرير والتوابل والورق والأفكار والثقافات بين الصين وأوروبا والشرق الأوسط.", c: "" },
+                    { t: "10. معركة عين جالوت التاريخية", d: "نقطة التحول التي أنقذت العالم.", s: "انتصر فيها الجيش المصري بقيادة قطز وبيبرس وأوقف زحف المغول عام 1260م.", c: "" },
+                    { t: "11. اختراع المطبعة لجوتنبرج", d: "الثورة التي نشرت الكتب للجميع.", s: "قبل المطبعة كانت الكتب تُنسخ باليد فتستغرق شهوراً، وبعدها انتشر العلم بسرعة البرق.", c: "" },
+                    { t: "12. حضارة المايا والفلك", d: "براعة مذهلة في الرياضيات والتقاويم.", s: "بنوا أهرامات مدرجة في أمريكا الوسطى ورصدوا حركة الكواكب بدقة متناهية.", c: "" },
+                    { t: "13. منارة الإسكندرية القديمة", d: "إحدى عجائب الدنيا السبع القديمة.", s: "بلغ ارتفاعها أكثر من 100 متر وكانت ترشد السفن ليلاً بمرآة تعكس ضوء الشمس والنار.", c: "" },
+                    { t: "14. صلاح الدين الأيوبي", d: "قائد اشتهر بالشجاعة والنبل.", s: "وحد الصفوف واستعاد القدس عام 1187م وضرب أروع الأمثلة في التسامح.", c: "" },
+                    { t: "15. اختراع البوصلة", d: "الأداة التي فتحت عصر الاستكشاف البحري.", s: "ساعدت البحارة على الإبحار في المحيطات دون الضياع.", c: "" },
+                    { t: "16. الكولوسيوم في روما", d: "أكبر مدرج روماني في التاريخ.", s: "كان يتسع لأكثر من 50,000 متفرج وبه أنظمة هندسية متطورة للممرات.", c: "" },
+                    { t: "17. الملكة حتشبسوت", d: "من أقوى حكام مصر القديمة.", s: "تميز عصرها بالسلام والازدهار التجاري وبنت معبد الدير البحري الفريد.", c: "" },
+                    { t: "18. جيش التيراكوتا في الصين", d: "آلاف التماثيل الطينية بالحجم الطبيعي.", s: "صُنع لحراسة مقبرة أول إمبراطور للصين وكل تمثال له ملامح وجه مختلفة تماماً!", c: "" },
+                    { t: "19. الثورة الصناعية والبخار", d: "بداية عصر الآلات والقطارات.", s: "غيرت حياة البشر من الزراعة اليدوية إلى المصانع الحديثة.", c: "" },
+                    { t: "20. الهبوط على سطح القمر 1969", d: "أعظم قفزة في تاريخ البشرية الحديث.", s: "خطا نيل أرمسترونج أول خطوة بشرية على القمر في رحلة أبولو 11.", c: "" }
+                ]
+            },
+            {
+                id: "geography", icon: "🌍", title: "12. عالم الجغرافيا وعجائب الأرض", color: "#059669", sub: "20 عجيبة جغرافية حول الكوكب",
+                items: [
+                    { t: "1. نهر النيل شريان الحياة", d: "أطول أنهار العالم.", s: "يمتد لأكثر من 6,650 كم ويمر بـ 11 دولة أفريقية ليصنع الحضارة في مصر.", c: "" },
+                    { t: "2. قمة إيفرست الشاهقة", d: "أعلى نقطة على سطح الأرض.", s: "ترتفع 8,849 متراً فوق مستوى سطح البحر في جبال الهيمالايا.", c: "" },
+                    { t: "3. خندق ماريانا السحيق", d: "أعمق نقطة في محيطات الأرض.", s: "يصل عمقه إلى 11 كيلومتراً تحت سطح المحيط الهادئ؛ لو وضعنا إيفرست بداخله لغطاه الماء!", c: "" },
+                    { t: "4. غابات الأمازون (رئة الأرض)", d: "أكبر غابة مطيرة في العالم.", s: "تنتج نسبة كبيرة من أكسجين الكوكب وتضم ملايين الأنواع من الحيوانات والنباتات.", c: "" },
+                    { t: "5. الصحراء الكبرى", d: "أكبر صحراء حارة في العالم.", s: "تغطي معظم شمال أفريقيا وتبلغ مساحتها مساحة الولايات المتحدة تقريباً.", c: "" },
+                    { t: "6. البحر الميت (أخفض نقطة)", d: "ملوحة فائقة تجعلك تطفو تلقائياً.", s: "يقع على عمق 430 متراً تحت مستوى سطح البحر، وملوحته أعلى بـ 9 مرات من المحيط.", c: "" },
+                    { t: "7. شلالات فيكتوريا المهيبة", d: "الدخان الذي يرعد.", s: "تقع بين زامبيا وزيمبابوي وتُعد من أضخم ستائر المياه المتدفقة في العالم.", c: "" },
+                    { t: "8. مثلث برمودا الغامض", d: "منطقة في المحيط الأطلسي.", s: "تشتهر بالتيارات البحرية القوية والعواصف المفاجئة وحقول المغناطيسية.", c: "" },
+                    { t: "9. القارة القطبية الجنوبية (أنتاركتيكا)", d: "أبرد وأجف قارة على وجه الأرض.", s: "تحتوي على 70% من المياه العذبة في العالم على شكل جليد.", c: "" },
+                    { t: "10. المحيط الهادئ العملاق", d: "أكبر محيطات الأرض.", s: "يغطي ثلث مساحة الكرة الأرضية تقريباً، وهو أكبر من مساحة اليابسة كلها مجتمعة!", c: "" },
+                    { t: "11. حزام النار في المحيط الهادئ", d: "منطقة البراكين والزلازل النشطة.", s: "يضم 75% من براكين العالم النشطة بسبب حركة الصفائح التكتونية.", c: "" },
+                    { t: "12. جزر المالديف الساحرة", d: "أخفض دولة في العالم.", s: "تتكون من أكثر من 1,000 جزيرة مرجانية في المحيط الهندي.", c: "" },
+                    { t: "13. الأخدود العظيم (Grand Canyon)", d: "تحفة نحتتها الأنهار عبر ملايين السنين.", s: "يقع في أمريكا ويكشف طبقات الأرض الجيولوجية بألوان مذهلة.", c: "" },
+                    { t: "14. بحيرة بايكال في روسيا", d: "أعمق وأقدم بحيرة عذبة في العالم.", s: "تحتوي وحدها على خمس المياه العذبة السائلة على كوكب الأرض.", c: "" },
+                    { t: "15. قناة السويس شريان التجارة العالمي", d: "تربط البحر الأحمر بالبحر المتوسط.", s: "أهم ممر ملاحي صناعي في العالم يختصر المسافة بين آسيا وأوروبا.", c: "" },
+                    { t: "16. جبل كليمنجارو", d: "أعلى قمة في قارة أفريقيا.", s: "بركان خامد في تنزانيا تغطي قمته الثلوج رغم وقوعه قرب خط الاستواء!", c: "" },
+                    { t: "17. الحاجز المرجاني العظيم", d: "أكبر نظام للشعاب المرجانية في العالم.", s: "يقع قبالة سواحل أستراليا ويمكن رؤيته من الفضاء الخارجي.", c: "" },
+                    { t: "18. شمس منتصف الليل في النرويج", d: "النهار يستمر 24 ساعة في الصيف.", s: "بسبب ميل محور الأرض، لا تغرب الشمس لأسابيع في المناطق القطبية صيفاً.", c: "" },
+                    { t: "19. صحراء أتاكاما في تشيلي", d: "أجف مكان غير قطبي على الأرض.", s: "بعض مناطقها لم تشهد قطرة مطر واحدة لمئات السنين.", c: "" },
+                    { t: "20. حركة الصفائح التكتونية", d: "القارات تتحرك ببطء مستمر.", s: "كانت كل القارات كتلة واحدة تسمى 'بانجيا' منذ ملايين السنين ثم انفصلت.", c: "" }
+                ]
+            },
+            {
+                id: "animals", icon: "🦁", title: "13. عالم الحيوان والطبيعة", color: "#eab308", sub: "20 حقيقة مدهشة عن قدرات الحيوانات",
+                items: [
+                    { t: "1. الفهد الصياد (شيتا)", d: "أسرع حيوان بري على وجه الأرض.", s: "يصل إلى سرعة 115 كم/ساعة في 3 ثوانٍ فقط، ويستخدم ذيله الطويل كدفة للتوازن.", c: "" },
+                    { t: "2. الحوت الأزرق العملاق", d: "أكبر حيوان عاش على الأرض على الإطلاق.", s: "يصل طوله لـ 30 متراً ووزنه لـ 180 طناً، وقلبه بحجم سيارة صغيرة!", c: "" },
+                    { t: "3. الأخطبوط ذو الثلاثة قلوب", d: "كائن بحري فائق الذكاء.", s: "يمتلك 3 قلوب، 9 أدمغة (واحد مركزي وواحد في كل ذراع)، ودمه لونه أزرق!", c: "" },
+                    { t: "4. صقر الشاهين", d: "أسرع مخلوق في السماء.", s: "ينقض على فريسته بسرعة تتجاوز 320 كم/ساعة.", c: "" },
+                    { t: "5. النحل ولغة الرقص", d: "نظام تواصل مذهل داخل الخلية.", s: "ترقص النحلة رقصات دائرية واهتزازية لتخبر زميلاتها بالاتجاه والمسافة الدقيقة للزهور.", c: "" },
+                    { t: "6. الدلافين تنام بنصف دماغ", d: "للتنفس والحذر من المفترسات.", s: "ينام نصف الدماغ وتُغلق عين واحدة بينما يبقى النصف الآخر مستيقظاً للصعود للتنفس.", c: "" },
+                    { t: "7. الحرباء وتغيير الألوان", d: "ليس للتخفي فقط كما يظن الجميع!", s: "تغير لونها للتواصل والتعبير عن مزاجها وتنظيم درجة حرارة جسمها.", c: "" },
+                    { t: "8. الفيل وذاكرته القوية", d: "أكبر حيوان بري ويمتلك ذكاءً عاطفياً.", s: "يتذكر الفيل مصادر المياه وأفراد قطيعه لعشرات السنين، وخرطومه يحتوي على 40,000 عضلة.", c: "" },
+                    { t: "9. البطريق الإمبراطور", d: "يتحمل أبرد ظروف الأرض.", s: "يتجمع الذكور في حلقات متلاصقة لحماية البيض في برد القطب الجنوبي (-50 درجة).", c: "" },
+                    { t: "10. الخفاش والرادار الصوتي", d: "يرى بأذنيه في الظلام الدامس.", s: "يصدر موجات فوق صوتية ترتد عن الحشرات ليحدد مكانها بدقة مذهلة.", c: "" },
+                    { t: "11. النمل يحمل 50 ضعف وزنه", d: "قوة عضلية ومجتمع منظم.", s: "يعمل النمل في فرق متعاونة لبناء مستعمرات ضخمة تحت الأرض.", c: "" },
+                    { t: "12. الزرافة ولسانها الطويل", d: "أطول حيوان على الأرض.", s: "يصل طول لسانها إلى 50 سم ولونه أزرق داكن ليحميها من حروق الشمس أثناء الأكل.", c: "" },
+                    { t: "13. سمك القرش وحاسة الشم الخارقة", d: "مفترس المحيطات القديم.", s: "يستطيع شم قطرة دم واحدة في مليون قطرة ماء من مسافة بعيدة.", c: "" },
+                    { t: "14. البومة والرؤية الليلية", d: "تلف رأسها 270 درجة.", s: "عيناها ثابتتان في جمجمتها ولذلك تعوض ذلك برقبة فائقة المرونة وطيران صامت تماماً.", c: "" },
+                    { t: "15. الجمل سفينة الصحراء", d: "مهندس البقاء في الحر والعطش.", s: "يخزن الدهون في سنامه للطاقة، وله رموش مزدوجة وأنف يغلق لحمايته من العواصف الرملية.", c: "" },
+                    { t: "16. الكوالا وبصمات الأصابع", d: "تشبه بصمات الإنسان تماماً!", s: "حتى تحت المجهر يصعب التفرقة بين بصمة إصبع الكوالا وبصمة الإنسان.", c: "" },
+                    { t: "17. طائر الطنان (Hummingbird)", d: "الطائر الوحيد الذي يطير للخلف.", s: "ترفرف أجنحته 80 مرة في الثانية الواحدة فيبدو معلقاً في الهواء.", c: "" },
+                    { t: "18. الدب القطبي وفراؤه الشفاف", d: "جلده أسود وفراؤه مجوف!", s: "يمتص الجلد الأسود حرارة الشمس، بينما يعكس الفراء الشفاف الضوء فيبدو أبيض.", c: "" },
+                    { t: "19. السلاحف البحرية والعودة للموطن", d: "بوصلة مغناطيسية داخلية.", s: "تعود أنثى السلحفاة لوضع بيضها على نفس الشاطئ الذي فقست فيه منذ عشرات السنين.", c: "" },
+                    { t: "20. التوازن البيئي", d: "كل مخلوق له دور أساسي.", s: "انقراض أي نوع يؤثر على السلسلة الغذائية بأكملها.", c: "" }
+                ]
+            },
+            {
+                id: "humanbody", icon: "🫀", title: "14. عالم جسم الإنسان", color: "#e11d48", sub: "20 معجزة مذهلة داخل جسمك",
+                items: [
+                    { t: "1. القلب المضخة التي لا تتوقف", d: "ينبض حوالي 100,000 مرة يومياً.", s: "يضخ أكثر من 7,000 لتر من الدم عبر شبكة أوعية دموية لو مُدت للفت حول الأرض مرتين!", c: "" },
+                    { t: "2. الدماغ البشري الخارق", d: "أعقد حاسوب في الكون.", s: "يحتوي على 86 مليار خلية عصبية ترسل إشارات بسرعة 400 كم/ساعة.", c: "" },
+                    { t: "3. بصمة الإصبع وبصمة العين", d: "هوية فريدة لا تتكرر.", s: "لا يوجد شخصان في العالم لهما نفس البصمة، حتى التوائم المتطابقة!", c: "" },
+                    { t: "4. حمض المعدة القوي", d: "قادر على إذابة المعادن!", s: "تفرز المعدة حمض الهيدروكلوريك لهضم الطعام وقتل الجراثيم، وتحمي نفسها بطبقة مخاطية تتجدد باستمرار.", c: "" },
+                    { t: "5. العظام أقوى من الفولاذ", d: "هيكل خفيف وفائق الصلابة.", s: "عظمة الفخذ تتحمل ضغطاً يعادل وزن سيارة صغيرة، وعدد عظام البالغ 206 عظمة.", c: "" },
+                    { t: "6. العين البشرية وملايين الألوان", d: "كاميرا بدقة 576 ميجابكسل.", s: "تستطيع العين التمييز بين حوالي 10 ملايين لون مختلف في جزء من الثانية.", c: "" },
+                    { t: "7. الكبد المصنع الكيميائي", d: "يقوم بأكثر من 500 وظيفة حيوية.", s: "هو العضو الداخلي الوحيد القادر على تجديد نفسه إذا فُقد جزء منه.", c: "" },
+                    { t: "8. الرئتان وتبادل الأكسجين", d: "مساحة سطح تعادل ملعب تنس!", s: "تحتوي الرئتان على ملايين الحويصلات الهوائية لتزويد الدم بالأكسجين وطرد ثاني أكسيد الكربون.", c: "" },
+                    { t: "9. الجلد أكبر أعضاء الجسم", d: "الدرع الواقي للجسم بالكامل.", s: "يتجدد الجلد بالكامل كل 28 يوماً تقريباً ويحمي الجسم من البكتيريا وتنظم الحرارة.", c: "" },
+                    { t: "10. الكليتان ومحطة التنقية", d: "تنظفان الدم 40 مرة يومياً.", s: "تعملان كفلتر دقيق لطرد الفضلات والحفاظ على توازن الماء والأملاح.", c: "" },
+                    { t: "11. خلايا الدم الحمراء", d: "سعاة البريد للأكسجين.", s: "ينتج نخاع العظم أكثر من 2 مليون خلية دم حمراء في كل ثانية!", c: "" },
+                    { t: "12. الأذن والتوازن", d: "ليست للسمع فقط!", s: "تحتوي الأذن الداخلية على قنوات مملوءة بسائل تحافظ على توازنك أثناء المشي والجري.", c: "" },
+                    { t: "13. جهاز المناعة (جيش الدفاع)", d: "يحارب الفيروسات والبكتيريا ليلاً ونهاراً.", s: "تتذكر كريات الدم البيضاء الجراثيم التي هاجمتك سابقاً لتقضي عليها فوراً في المستقبل.", c: "" },
+                    { t: "14. الحمض النووي (DNA)", d: "شفرة الحياة المكتوبة في كل خلية.", s: "لو فُك شريط الـ DNA في خلية واحدة لوصل طوله إلى مترين!", c: "" },
+                    { t: "15. العضلات والحركة", d: "أكثر من 600 عضلة في جسمك.", s: "أقوى عضلة بالنسبة لحجمها هي عضلة الفك، وأكثرها نشاطاً عضلات العين.", c: "" },
+                    { t: "16. العطس وسرعة الهواء", d: "رد فعل دفاعي لتنظيف الأنف.", s: "تخرج العطسة بسرعة تصل إلى 160 كم/ساعة لطرد المهيجات.", c: "" },
+                    { t: "17. الأمعاء الدقيقة وامتصاص الغذاء", d: "طولها يصل إلى 6 أمتار.", s: "تلتف داخل البطن لتمتص كل الفيتامينات والمعادن من الطعام المهضوم.", c: "" },
+                    { t: "18. الدموع وأنواعها", d: "ليست للبكاء فقط.", s: "هناك دموع ترطب العين باستمرار، ودموع تطرد الأتربة، ودموع عاطفية تريح التوتر.", c: "" },
+                    { t: "19. الأظافر والشعر", d: "يتكونان من بروتين الكيراتين.", s: "تنمو أظافر اليد أسرع بـ 3 مرات من أظافر القدم.", c: "" },
+                    { t: "20. الماء يشكل 60% من جسمك", d: "أساس كل التفاعلات الحيوية.", s: "حتى العظام تحتوي على 30% من الماء!", c: "" }
+                ]
+            },
+            {
+                id: "math", icon: "📐", title: "15. عالم الرياضيات والألغاز", color: "#6366f1", sub: "20 حقيقة ولغز رياضي ممتع",
+                items: [
+                    { t: "1. الرقم صفر واختراع الخوارزمي", d: "الرقم الذي غير وجه الرياضيات.", s: "بدون الصفر لم يكن ليوجد النظام العشري ولا أجهزة الكمبيوتر (0 و 1).", c: "" },
+                    { t: "2. متتالية فيبوناتشي في الطبيعة", d: "1, 1, 2, 3, 5, 8, 13, 21...", s: "كل رقم هو مجموع الرقمين السابقين له، وتظهر هذه النسبة في عباد الشمس والأصداف والمجرات!", c: "" },
+                    { t: "3. النسبة الذهبية (1.618)", d: "معادلة الجمال والتناسق في الكون.", s: "استخدمها الفنانون والمهندسون في الأهرامات واللوحات الفنية لتبدو مريحة للعين.", c: "" },
+                    { t: "4. الرقم باي (π = 3.14159...)", d: "نسبة محيط الدائرة إلى قطرها.", s: "رقم لا نهائي ولا يتكرر نمطه أبداً، وحُسب منه تريليونات الأرقام.", c: "" },
+                    { t: "5. خدعة الضرب في 11 السريعة", d: "اضرب أي رقم من خانتين في 11 في ثانية!", s: "اجمع الرقمين وضعهما في المنتصف: مثلاً 35 × 11 -> اجمع 3+5=8 وضعها في الوسط = 385!", c: "" },
+                    { t: "6. نظرية فيثاغورس للمثلث القائم", d: "أشهر معادلة في الهندسة.", s: "مجموع مربعي ضلعي القائمة يساوي مربع الوتر (a² + b² = c²).", c: "" },
+                    { t: "7. لغز رقعة الشطرنج وحبات القمح", d: "قوة التضاعف الأسي المذهلة.", s: "لو وضعت حبة قمح في المربع الأول وضاعفتها في كل مربع حتى 64، ستحتاج قمحاً يفوق إنتاج الأرض لقرون!", c: "" },
+                    { t: "8. الأعداد الأولية (حراس التشفير)", d: "أعداد لا تقبل القسمة إلا على نفسها والواحد.", s: "مثل 2, 3, 5, 7, 11, 13.. وتُستخدم اليوم في تأمين البنوك والإنترنت.", c: "" },
+                    { t: "9. مجموع زوايا المثلث 180 درجة", d: "قاعدة ثابتة في الهندسة المستوية.", s: "مهما تغير شكل المثلث أو حجمه، مجموع زواياه الداخلية يساوي 180 دائماً.", c: "" },
+                    { t: "10. النظام الثنائي (لغة الكمبيوتر)", d: "كل شيء يُكتب بالصفر والواحد فقط.", s: "الرقم 5 في لغة الكمبيوتر يُكتب 101، وكل صورة وفيديو ولعبة هي ملايين من 0 و 1.", c: "" },
+                    { t: "11. مفارقة أعياد الميلاد", d: "احتمال مدهش في الإحصاء.", s: "في غرفة بها 23 شخصاً فقط، هناك احتمال 50% أن يشترك شخصان في نفس يوم الميلاد!", c: "" },
+                    { t: "12. شريط موبيوس السحري", d: "ورقة لها وجه واحد وحافة واحدة!", s: "اقطع شريطاً ورقياً، لف طرفه نصف لفة والصقه؛ لو رسمت خطاً في منتصفه ستعود لنقطة البداية وقد مررت على الوجهين!", c: "" },
+                    { t: "13. الشكل السداسي عند النحل", d: "أذكى شكل هندسي لتوفير المساحة.", s: "يستهلك أقل كمية من الشمع ويعطي أكبر مساحة تخزين للعسل بدون فراغات.", c: "" },
+                    { t: "14. الرقم 9 السحري", d: "أي مضاعف للرقم 9 مجموع أرقامه 9.", s: "مثلاً 9×4=36 (3+6=9)، و 9×8=72 (7+2=9).", c: "" },
+                    { t: "15. اللانهاية (Infinity ∞)", d: "ليست رقماً بل فكرة للاستمرار بلا توقف.", s: "الأعداد لا تنتهي أبداً؛ مهما قلت أكبر رقم يمكنك دائماً إضافة 1 إليه.", c: "" },
+                    { t: "16. الإحداثيات الديكارتية (X, Y, Z)", d: "أساس برمجة الألعاب ثلاثية الأبعاد.", s: "ابتكرها ديكارت لتحديد موقع أي نقطة بدقة في الفراغ.", c: "" },
+                    { t: "17. المربع السحري", d: "مصفوفة أرقام مجموعها متساوٍ في كل اتجاه.", s: "مجموع الصفوف والأعمدة والأقطار يعطي نفس الرقم دائماً.", c: "" },
+                    { t: "18. الهندسة الكسيرية (Fractals)", d: "أشكال تتكرر فيها نفس التفاصيل عند التكبير.", s: "تظهر في ندفة الثلج، أوراق السرخس، والبرق.", c: "" },
+                    { t: "19. الاحتمالات واتخاذ القرار", d: "حساب فرص حدوث الأشياء.", s: "تُستخدم في التنبؤ بالطقس، الرياضة، والاقتصاد.", c: "" },
+                    { t: "20. الرياضيات لغة الكون", d: "كما قال جاليليو.", s: "كل قوانين الفيزياء والفلك والبرمجة مكتوبة بلغة الرياضيات.", c: "" }
+                ]
+            },
+            {
+                id: "dinosaurs", icon: "🦖", title: "16. عالم الديناصورات وما قبل التاريخ", color: "#65a30d", sub: "20 حقيقة عن عمالقة العصر الجوراسي",
+                items: [
+                    { t: "1. تي ريكس (Tyrannosaurus Rex)", d: "ملك السحالي الطاغية.", s: "امتلك أقوى عضة لحيوان بري في التاريخ، وكانت أسنانه بحجم الموز!", c: "" },
+                    { t: "2. أرجنتينوصور العملاق", d: "أضخم ديناصور عاش على الأرض.", s: "وصل طوله إلى 35 متراً ووزنه لأكثر من 70 طناً وكان آكلاً للنباتات.", c: "" },
+                    { t: "3. فيلوسيرابتور الذكي", d: "صياد سريع كان يمتلك ريشاً!", s: "كان بحجم الديك الرومي الكبير ويصطاد في مجموعات بذكاء ومخلب معقوف حاد.", c: "" },
+                    { t: "4. ترايسيراتوبس ذو الثلاثة قرون", d: "دبابة العصر الطباشيري.", s: "استخدم قرونه الطويلة ودرعه العظمي الضخم للدفاع عن نفسه ضد التي ريكس.", c: "" },
+                    { t: "5. ستيجوصور ذو الصفائح الظهرية", d: "ديناصور بذيل مسلح بالأشواك.", s: "كان دماغه بحجم حبة الجوز فقط رغم جسمه الضخم!", c: "" },
+                    { t: "6. كيف انقرضت الديناصورات؟", d: "نيزك عملاق ضرب الأرض منذ 66 مليون سنة.", s: "سقط في المكسيك وأثار سحابة غبار حجبت الشمس لسنوات فتغير المناخ.", c: "" },
+                    { t: "7. الطيور هي أحفاد الديناصورات!", d: "حقيقة علمية مذهلة.", s: "تطورت الطيور الحديثة من سلالة صغيرة من الديناصورات ذات الريش.", c: "" },
+                    { t: "8. سبينوصور المصري العملاق", d: "أكبر ديناصور مفترس عاش في الماء واليابس.", s: "اكتُشفت حفرياته في الواحات البحرية بمصر، وكان له شراع ضخم على ظهره.", c: "" },
+                    { t: "9. التيروصورات ليست ديناصورات!", d: "زواحف طائرة عاصرت الديناصورات.", s: "بعضها مثل كويتزالكوتلس كان باع جناحيه بحجم طائرة صغيرة.", c: "" },
+                    { t: "10. الموزاصور وحش البحار", d: "زاحف بحري عملاق حكم المحيطات.", s: "كان يمتلك فكين مزدوجين لابتلاع الفرائس البحرية الكبيرة.", c: "" },
+                    { t: "11. معنى كلمة ديناصور", d: "كلمة يونانية تعني 'السحلية المرعبة'.", s: "أطلقها العالم ريتشارد أوين عام 1842 بعد دراسة حفرياتها الضخمة.", c: "" },
+                    { t: "12. ديناصورات كانت تبتلع الحجارة!", d: "تسمى حصى المعدة (Gastroliths).", s: "كانت الديناصورات آكلة النباتات تبتلع الحجارة لتساعدها في طحن الأوراق القاسية في معدتها.", c: "" },
+                    { t: "13. بيض الديناصورات", d: "كانت تتكاثر بالبيض وتبني أعشاشاً.", s: "أكبر بيضة ديناصور مكتشفة كانت بحجم كرة السلة.", c: "" },
+                    { t: "14. أنكيلوصور المدرع", d: "جسده مغطى بدروع عظمية كالتمساح.", s: "كانت نهاية ذيله عبارة عن مطرقة عظمية ثقيلة تحطم عظام المهاجمين.", c: "" },
+                    { t: "15. براكيوصور طويل الرقبة", d: "زرافة العصور القديمة.", s: "كانت أرجله الأمامية أطول من الخلفية ليصل لأعلى أوراق الأشجار.", c: "" },
+                    { t: "16. عاشت الديناصورات 165 مليون سنة", d: "فترة أطول بكثير من وجود البشر.", s: "عاشت عبر 3 عصور: الترياسي، الجوراسي، والطباشيري.", c: "" },
+                    { t: "17. علم الحفريات (Paleontology)", d: "علماء يقرأون تاريخ الأرض من الصخور.", s: "يستخدمون الفرشاة والأدوات الدقيقة لاستخراج العظام المتحجرة.", c: "" },
+                    { t: "18. الماموث الصوفي (العصر الجليدي)", d: "ظهر بعد انقراض الديناصورات بملايين السنين.", s: "فيل عملاق مغطى بالفرو الكثيف وأنياب طويلة مقوسة.", c: "" },
+                    { t: "19. سمكة السيلكانث الأحفورة الحية", d: "عاشت مع الديناصورات وما زالت موجودة!", s: "ظن العلماء أنها انقرضت منذ 66 مليون سنة حتى اصطادها صيادون عام 1938.", c: "" },
+                    { t: "20. الكهرمان وحفظ الحشرات القديمة", d: "صمغ الأشجار المتحجر.", s: "حفظ بعوضاً وحشرات من عصر الديناصورات كاملة التفاصيل.", c: "" }
+                ]
+            },
+            {
+                id: "inventions", icon: "💡", title: "17. عالم الاختراعات والمبتكرين", color: "#f59e0b", sub: "20 اختراعاً غير حياة البشر للأبد",
+                items: [
+                    { t: "1. المصباح الكهربائي (توماس إديسون)", d: "أضاء الليل وحول العالم.", s: "أجرى أكثر من 1,000 تجربة حتى توصل لفتيل الكربون الذي يدوم طويلاً.", c: "" },
+                    { t: "2. الطائرة (الأخوان رايت)", d: "تحقيق حلم الطيران البشري عام 1903.", s: "بدآ بصناعة الدراجات ثم صمما أول طائرة بمحرك تحلق بنجاح.", c: "" },
+                    { t: "3. الهاتف (ألكسندر جراهام بيل)", d: "نقل الصوت البشري عبر الأسلاك.", s: "أول جملة قيلت عبر الهاتف عام 1876: 'سيد واتسون، تعال إلى هنا أريد رؤيتك'.", c: "" },
+                    { t: "4. البنسلين (ألكسندر فلمنج)", d: "أول مضاد حيوي أنقذ مئات الملايين.", s: "اكتشفه بالصدفة عام 1928 عندما لاحظ أن فطراً يقضي على البكتيريا في طبق المختبر.", c: "" },
+                    { t: "5. شبكة الويب العالمية (تيم بيرنرز لي)", d: "الإنترنت الذي نستخدمه اليوم.", s: "اخترعها عام 1989 لربط المعلومات والأبحاث وجعلها متاحة مجاناً للبشرية.", c: "" },
+                    { t: "6. الكاميرا الفوتوغرافية (ابن الهيثم)", d: "القمرة المظلمة أساس التصوير.", s: "شرح العالم العربي الحسن بن الهيثم كيف يدخل الضوء من ثقب صغير ليكون صورة مقلوبة.", c: "" },
+                    { t: "7. الأشعة السينية X-Ray (رونتجن)", d: "رؤية العظام داخل الجسم دون جراحة.", s: "أول صورة أشعة كانت ليد زوجته وظهرت فيها عظامها وخاتم زواجها.", c: "" },
+                    { t: "8. الميكروويف (اختراع بالصدفة)", d: "تسخين الطعام بالموجات الكهرومغناطيسية.", s: "لاحظ المهندس بيرسي سبنسر ذوبان قطعة شوكولاتة في جيبه أثناء وقوفه قرب جهاز رادار!", c: "" },
+                    { t: "9. البطارية الكهربائية (أليساندرو فولتا)", d: "تخزين الطاقة الكهربائية المحمولة.", s: "سميت وحدة الجهد الكهربائي (الفولت) تكريماً له.", c: "" },
+                    { t: "10. المحرك البخاري (جيمس واط)", d: "قلب الثورة الصناعية.", s: "حول طاقة بخار الماء إلى حركة تشغل القطارات والسفن والمصانع.", c: "" },
+                    { t: "11. التلسكوب (جاليليو جاليلي)", d: "نافذة البشرية على النجوم والكواكب.", s: "اكتشف به أقمار كوكب المشتري وجبال القمر لأول مرة.", c: "" },
+                    { t: "12. اللقاحات والتطعيمات (إدوارد جينر)", d: "تدريب المناعة لهزيمة الأوبئة.", s: "قضى التطعيم على أمراض خطيرة مثل الجدري.", c: "" },
+                    { t: "13. اختراع العجلة", d: "أقدم وأهم اختراع ميكانيكي.", s: "سهلت النقل والزراعة وصناعة الآلات منذ آلاف السنين.", c: "" },
+                    { t: "14. الراديو والاتصال اللاسلكي (ماركوني)", d: "إرسال الموجات الصوتية عبر الهواء.", s: "أساس الواي فاي والبلوتوث والهواتف المحمولة الحديثة.", c: "" },
+                    { t: "15. الترانزستور (عقل الإلكترونيات)", d: "المكون الصغير الذي صنع ثورة الكمبيوتر.", s: "يحتوي معالج هاتفك اليوم على مليارات الترانزستورات المجهرية.", c: "" },
+                    { t: "16. الثلاجة وحفظ الطعام", d: "منع تلف الأغذية بالتبريد.", s: "غيرت صحة البشر وحمتهم من التسمم الغذائي.", c: "" },
+                    { t: "17. نظام تحديد المواقع (GPS)", d: "أقمار صناعية ترشدك في أي مكان.", s: "يعتمد على شبكة من 24 قمراً صناعياً تدور حول الأرض.", c: "" },
+                    { t: "18. الطباعة ثلاثية الأبعاد (3D Printing)", d: "تصنيع المجسمات طبقة فوق طبقة.", s: "تُستخدم اليوم في صناعة قطع الغيار، المنازل، وحتى الأطراف الصناعية.", c: "" },
+                    { t: "19. الطاقة الشمسية النظيفة", d: "تحويل ضوء الشمس إلى كهرباء.", s: "مصدر طاقة متجدد وصديق للبيئة لا ينفد.", c: "" },
+                    { t: "20. الفيلكرو (اللاصق السحري)", d: "اختراع مستوحى من الطبيعة!", s: "ابتكره مهندس سويسري بعد أن لاحظ التصاق بذور النباتات الشائكة بفراء كلبه.", c: "" }
+                ]
+            },
+            {
+                id: "riddles", icon: "🧩", title: "18. عالم الألغاز والذكاء", color: "#14b8a6", sub: "20 لغز ذكي لتنشيط عقلك مع الحل",
+                items: [
+                    { t: "1. لغز: شيء كلما أخذت منه كبر!", d: "فكر في شيء يزداد اتساعاً بالحفر.", s: "الحل: الحفرة!", c: "" },
+                    { t: "2. لغز: له أسنان ولا يعض!", d: "تستخدمه كل صباح لتنظيم مظهرك.", s: "الحل: المشط!", c: "" },
+                    { t: "3. لغز: يسير بلا رجلين ويبكي بلا عينين!", d: "تراه في السماء في أيام الشتاء.", s: "الحل: السحاب!", c: "" },
+                    { t: "4. لغز: ما هو الشيء الذي يكتب ولا يقرأ؟", d: "أداة أساسية في حقيبتك المدرسية.", s: "الحل: القلم!", c: "" },
+                    { t: "5. لغز: ما هو البيت الذي ليس له أبواب ولا نوافذ؟", d: "موجود في الأدب واللغة العربية.", s: "الحل: بيت الشعر!", c: "" },
+                    { t: "6. لغز: شيء إذا لمسته صاح!", d: "موجود على أبواب المنازل والمدارس.", s: "الحل: الجرس!", c: "" },
+                    { t: "7. لغز: أين يوجد البحر الذي لا ماء فيه؟", d: "انظر في كتاب الجغرافيا!", s: "الحل: على الخريطة!", c: "" },
+                    { t: "8. لغز: ما هو الشيء الذي يرتفع ولا ينزل أبداً؟", d: "يزداد كل سنة في يوم ميلادك.", s: "الحل: عمرك!", c: "" },
+                    { t: "9. لغز: سبقتك في السباق وأخذت مكانك!", d: "لو سبقت الشخص الثاني في السباق، فما هو مركزك؟", s: "الحل: المركز الثاني (لأنك أخذت مكانه ولم تسبق الأول بعد)!", c: "" },
+                    { t: "10. لغز: شيء له رقبة وليس له رأس!", d: "تضع فيه الماء أو العصير.", s: "الحل: الزجاجة!", c: "" },
+                    { t: "11. لغز: ما هو الشيء الذي يقرصك ولا تراه؟", d: "تشعر به عندما تتأخر عن موعد الغداء.", s: "الحل: الجوع!", c: "" },
+                    { t: "12. لغز: شيء يدخل الماء ولا يبتل!", d: "يخرج من المصباح أو الشمس.", s: "الحل: الضوء!", c: "" },
+                    { t: "13. لغز: ما هو الشيء الذي كلما زاد نقص؟", d: "يمر بنا كل ثانية.", s: "الحل: العمر!", c: "" },
+                    { t: "14. لغز: كله ثقوب ومع ذلك يحفظ الماء!", d: "تستخدمه في الاستحمام والتنظيف.", s: "الحل: الإسفنجة!", c: "" },
+                    { t: "15. لغز: يتكلم بكل لغات العالم!", d: "تسمعه في الجبال والأماكن الفارغة.", s: "الحل: صدى الصوت!", c: "" },
+                    { t: "16. لغز: ما هو الشيء الذي أمامك دائماً ولا تراه؟", d: "الأيام القادمة.", s: "الحل: المستقبل!", c: "" },
+                    { t: "17. لغز: شهر ميلادي إذا حذفت أوله صار اسم فاكهة!", d: "فكر في شهور الصيف.", s: "الحل: تموز (يوليو) -> إذا حذفت التاء يصبح 'موز'!", c: "" },
+                    { t: "18. لغز: أخت خالك وليست خالتك!", d: "قريبة جداً منك!", s: "الحل: أمك!", c: "" },
+                    { t: "19. لغز: شيء يمشي ويقف وليس له أرجل!", d: "تخبرك بالوقت.", s: "الحل: الساعة!", c: "" },
+                    { t: "20. لغز: ما هو الشيء الذي ينبض بلا قلب؟", d: "أيضاً تخبرك بالوقت!", s: "الحل: الساعة!", c: "" }
+                ]
+            },
+            {
+                id: "english", icon: "🗣️", title: "19. عالم اللغات والإنجليزية", color: "#0284c7", sub: "20 قاعدة ومصطلح لإتقان الإنجليزية",
+                items: [
+                    { t: "1. قاعدة تقسيم المقاطع الصوتية (Syllables)", d: "أذكى طريقة لحفظ إملاء أي كلمة طويلة.", s: "قسم الكلمة لمقاطع صوتية مثل: In-for-ma-tion أو En-vi-ron-ment، ستكتبها بسهولة تامة!", c: "" },
+                    { t: "2. الفرق بين (Make) و (Do)", d: "أشهر حيرة في قواعد الإنجليزية.", s: "نستخدم Make لصنع أو إنتاج شيء جديد (Make a cake)، ونستخدم Do للأعمال والأنشطة (Do homework).", c: "" },
+                    { t: "3. مصطلح: Piece of cake", d: "لا تعني قطعة كيك حرفياً!", s: "تُستخدم عندما يكون الامتحان أو المهمة سهلة جداً: 'The exam was a piece of cake'.", c: "" },
+                    { t: "4. مصطلح: Break a leg!", d: "تُقال لتمني الحظ السعيد!", s: "تُقال للممثلين واللاعبين قبل المباراة أو العرض بمعنى 'بالتوفيق والنجاح'.", c: "" },
+                    { t: "5. الفرق بين (Since) و (For)", d: "في زمن المضارع التام.", s: "Since تأتي مع بداية الوقت المحدد (Since 2020)، أما For فتأتي مع المدة الكاملة (For 5 years).", c: "" },
+                    { t: "6. الحروف الصامتة (Silent Letters)", d: "تُكتب ولا تُنطق!", s: "مثل حرف K في (Knife, Know) وحرف W في (Write, Wrong) وحرف B في (Climb).", c: "" },
+                    { t: "7. قاعدة (Used to) للعادات القديمة", d: "التعبير عن شيء كنت تفعله في الماضي وتوقفت.", s: "مثال: 'I used to play with toys when I was young'.", c: "" },
+                    { t: "8. مصطلح: Hit the books", d: "لا تعني ضرب الكتب!", s: "تعني البدء في المذاكرة بجدية واجتهاد: 'I have to hit the books tonight'.", c: "" },
+                    { t: "9. الفرق بين (Affect) و (Effect)", d: "الأولى فعل والثانية اسم.", s: "Affect تعني 'يؤثر على' (Verb)، بينما Effect تعني 'تأثير أو نتيجة' (Noun).", c: "" },
+                    { t: "10. قاعدة (If) الشرطية الأولى", d: "للتحدث عن أشياء محتملة الحدوث في المستقبل.", s: "If + مضارع بسيط ، will + المصدر: 'If you study hard, you will succeed'.", c: "" },
+                    { t: "11. مصطلح: Under the weather", d: "التعبير عن الشعور بالتعب أو المرض الخفيف.", s: "مثال: 'I'm feeling a bit under the weather today'.", c: "" },
+                    { t: "12. الفرق بين (Look, See, Watch)", d: "ثلاثة أفعال للرؤية باختلاف دقيق.", s: "See رؤية غير مقصودة، Look توجيه النظر لشيء، Watch مشاهدة شيء متحرك كالتلفاز والمباراة.", c: "" },
+                    { t: "13. أطول كلمة في الإنجليزية", d: "كلمة مكونة من 45 حرفاً!", s: "Pneumonoultramicroscopicsilicovolcanoconiosis (اسم مرض رئوي يصيب عمال المناجم).", c: "" },
+                    { t: "14. جملة تجمع كل حروف الإنجليزية (Pangram)", d: "تُستخدم لاختبار الخطوط ولوحات المفاتيح.", s: "'The quick brown fox jumps over the lazy dog' تحتوي على كل الحروف الـ 26.", c: "" },
+                    { t: "15. مصطلح: Once in a blue moon", d: "للتعبير عن شيء نادر الحدوث جداً.", s: "مثال: 'He visits us once in a blue moon'.", c: "" },
+                    { t: "16. الفرق بين (Borrow) و (Lend)", d: "الأخذ مقابل الإعطاء.", s: "Borrow تعني تستعير شيئاً من شخص، أما Lend فتعني تُقرض أو تعطي شيئاً لشخص.", c: "" },
+                    { t: "17. اختصارات المحادثة السريعة", d: "كيف يتحدث المتحدثون الأصليون.", s: "Wanna = Want to | Gonna = Going to | Gotta = Got to.", c: "" },
+                    { t: "18. الكلمات المتشابهة في النطق (Homophones)", d: "نفس الصوت ومعنى وإملاء مختلف.", s: "مثل: Sea (بحر) و See (يرى) | Sun (شمس) و Son (ابن).", c: "" },
+                    { t: "19. مصطلح: Cost an arm and a leg", d: "للتعبير عن شيء باهظ الثمن جداً.", s: "مثال: 'This new gaming PC costs an arm and a leg'.", c: "" },
+                    { t: "20. قاعدة الاستماع اليومي (Shadowing)", d: "أسرع طريقة لإتقان النطق.", s: "اسمع جملة من فيلم أو فيديو ورددها فوراً بنفس النبرة والسرعة.", c: "" }
+                ]
+            },
+            {
+                id: "football", icon: "⚽", title: "20. عالم كرة القدم والأساطير", color: "#22c55e", sub: "ادخل ملعب الأساطير وكروت اللاعبين!",
+                isSpecialFootball: true,
+                items: []
+            }
+        ];
+
+        function renderWorldsGrid(filterText) {
+            var container = document.getElementById("worlds-container");
+            container.innerHTML = "";
+            var query = (filterText || "").trim();
+
+            for (var i = 0; i < allWorlds.length; i++) {
+                var w = allWorlds[i];
+                if (query && w.title.indexOf(query) === -1 && w.sub.indexOf(query) === -1) continue;
+
+                var card = document.createElement("div");
+                card.className = "world-card";
+                card.style.borderColor = w.color;
+                card.innerHTML =
+                    "<div class='world-icon'>" + w.icon + "</div>" +
+                    "<h3 class='world-title' style='color:" + w.color + ";'>" + w.title + "</h3>" +
+                    "<p class='world-sub'>" + w.sub + "</p>";
+
+                card.onclick = (function(worldObj) {
+                    return function() { openWorld(worldObj); };
+                })(w);
+                container.appendChild(card);
+            }
+        }
+        renderWorldsGrid("");
+
+        function filterWorlds() {
+            var val = document.getElementById("world-search").value;
+            renderWorldsGrid(val);
+        }
+
+        function openWorld(worldObj) {
+            if (worldObj.isSpecialFootball) {
+                switchScreen('football-workspace');
+                return;
+            }
+
+            switchScreen('world-content-scene');
+            var titleEl = document.getElementById("active-world-title");
+            titleEl.innerText = worldObj.icon + " " + worldObj.title;
+            titleEl.style.color = worldObj.color;
+            document.getElementById("active-world-desc").innerText = worldObj.sub + " (اضغط على أي كارت للقراءة والتفاصيل):";
+
+            var listEl = document.getElementById("world-items-list");
+            listEl.innerHTML = "";
+
+            for (var i = 0; i < worldObj.items.length; i++) {
+                var item = worldObj.items[i];
+                var card = document.createElement("div");
+                card.className = "item-card";
+                card.style.borderColor = worldObj.color;
+                card.innerHTML =
+                    "<div class='item-title' style='color:" + worldObj.color + ";'>" + item.t + "</div>" +
+                    "<div class='item-preview'>" + item.d + "</div>";
+
+                card.onclick = (function(it, col) {
+                    return function() { showItemDetail(it, col); };
+                })(item, worldObj.color);
+                listEl.appendChild(card);
+            }
+        }
+
+        function showItemDetail(item, color) {
+            switchScreen('item-detail-scene');
+            var box = document.getElementById("item-detail-content");
+            box.style.borderColor = color;
+            document.getElementById("back-to-world-btn").style.background = color;
+
+            var html =
+                "<h2 style='color:" + color + "; margin-top:0; font-size:1.7rem;'>" + item.t + "</h2>" +
+                "<p style='color:#fde047; font-weight:bold; font-size:1.1rem;'>💡 الفكرة الأساسية:</p>" +
+                "<p style='color:#f8fafc; font-size:1.05rem; line-height:1.6;'>" + item.d + "</p>" +
+                "<p style='color:#4ade80; font-weight:bold; font-size:1.1rem; margin-top:15px;'>📖 الشرح والتفاصيل:</p>" +
+                "<p style='color:#cbd5e1; font-size:1.05rem; line-height:1.7;'>" + item.s + "</p>";
+
+            if (item.c && item.c.length > 0) {
+                html += "<p style='color:#38bdf8; font-weight:bold; margin-top:15px;'>💻 الكود البرمجي (C#):</p>" +
+                        "<div class='code-block'>" + item.c + "</div>";
+            }
+            box.innerHTML = html;
+        }
+
+        var playersDB = [
+            { keys: ["صلاح"], name: "صلاح 👑", pos: "RW", rating: "91", club: "ليفربول", num: "11", color: "#dc2626", face: "👑", stats: "سرعة 90 | تسديد 89", desc: "الملك المصري وأسطورة ليفربول." },
+            { keys: ["ميسي"], name: "ميسي 🐐", pos: "RW", rating: "90", club: "إنتر ميامي", num: "10", color: "#ec4899", face: "🐐", stats: "تمرير 92 | مراوغة 94", desc: "البرغوث صاحب الـ 8 كرات ذهبية." },
+            { keys: ["رونالدو"], name: "رونالدو 🐐", pos: "ST", rating: "90", club: "النصر", num: "7", color: "#eab308", face: "🐐", stats: "سرعة 84 | تسديد 93", desc: "صاروخ ماديرا والهداف التاريخي." },
+            { keys: ["مبابي"], name: "مبابي ⚡", pos: "ST", rating: "91", club: "ريال مدريد", num: "9", color: "#f8fafc", face: "⚡", stats: "سرعة 97 | تسديد 90", desc: "أسرع لاعب في العالم." },
+            { keys: ["هالاند"], name: "هالاند 🤖", pos: "ST", rating: "91", club: "مانشستر سيتي", num: "9", color: "#38bdf8", face: "🤖", stats: "تسديد 93 | قوة 94", desc: "ماكينة الأهداف." },
+            { keys: ["بيليه"], name: "بيليه 👑", pos: "ST", rating: "98", club: "البرازيل", num: "10", color: "#eab308", face: "👑", stats: "تسديد 97 | مراوغة 96", desc: "ملك كرة القدم التاريخي." },
+            { keys: ["مارادونا"], name: "مارادونا ⚡", pos: "CAM", rating: "97", club: "الأرجنتين", num: "10", color: "#38bdf8", face: "⚡", stats: "مراوغة 99 | تمرير 94", desc: "الساحر الأرجنتيني." },
+            { keys: ["نيمار"], name: "نيمار 🎨", pos: "LW", rating: "88", club: "البرازيل", num: "10", color: "#eab308", face: "🎨", stats: "مراوغة 93 | سرعة 86", desc: "ملك المهارات والاستعراض." },
+            { keys: ["مرموش"], name: "مرموش ⚡", pos: "ST", rating: "87", club: "مانشستر سيتي", num: "7", color: "#0284c7", face: "⚡", stats: "سرعة 92 | تسديد 86", desc: "الفرعون المتألق بالسرعة." },
+            { keys: ["رونالدينيو", "دينيو"], name: "رونالدينيو 🎪", pos: "LW", rating: "95", club: "البرازيل", num: "10", color: "#1d4ed8", face: "🎪", stats: "مهارة 99 | مراوغة 99", desc: "ساحر الكرة وصاحب الابتسامة." }
+        ];
+
+        var extraShortNames = ["زيدان", "فينيسيوس", "بيلينجهام", "يامال", "رودري", "دي بروين", "ليفاندوفسكي", "كين", "ساكا", "فودين", "بالمر", "فالفيردي", "مودريتش", "كورتوا", "أليسون", "فان دايك", "راموس", "كاسيميرو", "هازارد", "زلاتان", "زيزو", "إمام", "الشناوي", "تريزيجيه", "بيدري", "جافي", "كوندي", "برونو", "ساني", "موسيالا", "بوفون", "نوير", "كاسياس", "تشافي", "إنييستا", "سواريز", "بنزيما", "بيل", "روبن", "ريبيري"];
+
+        function buildQuickPlayers() {
+            while (playersDB.length > 10) playersDB.pop();
+            for (var i = 0; i < extraShortNames.length; i++) {
+                playersDB.push({
+                    keys: [extraShortNames[i]],
+                    name: extraShortNames[i] + " ⚽",
+                    pos: "PRO",
+                    rating: String(85 + (i % 10)),
+                    club: "نجوم العالم",
+                    num: String((i + 7) % 99),
+                    color: "#1e293b",
+                    face: "⭐",
+                    stats: "سرعة 88 | مهارة 89 | تسديد 87",
+                    desc: "لاعب أسطوري في تشكيلة " + visitorName + "."
+                });
+            }
+
+            var container = document.getElementById("quick-players-container");
+            container.innerHTML = "";
+            for (var j = 0; j < playersDB.length; j++) {
+                var span = document.createElement("span");
+                span.className = "tag-chip";
+                span.innerText = playersDB[j].name;
+                span.onclick = (function(pName) {
+                    return function() {
+                        document.getElementById("player-input").value = pName;
+                        showPlayerCard();
+                    };
+                })(playersDB[j].keys[0]);
+                container.appendChild(span);
+            }
+        }
+        buildQuickPlayers();
+
+        document.getElementById("btn-show-player").onclick = showPlayerCard;
+
+        function showPlayerCard() {
+            var inputName = document.getElementById("player-input").value.trim();
+            var out = document.getElementById("player-output");
+            if (!inputName) return;
+            var found = null;
+            for (var i = 0; i < playersDB.length; i++) {
+                for (var j = 0; j < playersDB[i].keys.length; j++) {
+                    if (inputName.indexOf(playersDB[i].keys[j]) !== -1) {
+                        found = playersDB[i];
+                        break;
+                    }
+                }
+                if (found) break;
+            }
+
+            if (found) {
+                out.innerHTML =
+                    "<div class='fifa-card'>" +
+                        "<div class='card-top'>" +
+                            "<div class='card-rating-box'>" +
+                                "<div class='card-rating'>" + found.rating + "</div>" +
+                                "<div class='card-pos'>" + found.pos + "</div>" +
+                            "</div>" +
+                            "<div class='card-player-art' style='background:" + found.color + "; color:#fff;'>" +
+                                "<div style='font-size: 2.8rem;'>" + found.face + "</div>" +
+                                "<div style='font-weight:bold; font-size:0.9rem; margin-top:2px;'>#" + found.num + "</div>" +
+                            "</div>" +
+                        "</div>" +
+                        "<div class='card-name'>" + found.name + "</div>" +
+                        "<div class='card-club'>" + found.club + "</div>" +
+                        "<div class='card-stats'>" + found.stats.replace(/\|/g, "</div><div>") + "</div>" +
+                        "<div class='card-desc'>" + found.desc + "</div>" +
+                    "</div>";
+            } else {
+                out.innerHTML =
+                    "<div class='fifa-card' style='background: linear-gradient(145deg, #0284c7, #1e3a8a); border-color: #38bdf8;'>" +
+                        "<div class='card-top'>" +
+                            "<div class='card-rating-box'>" +
+                                "<div class='card-rating'>95</div>" +
+                                "<div class='card-pos'>STAR</div>" +
+                            "</div>" +
+                            "<div class='card-player-art' style='background:#0f172a; color:#38bdf8;'>" +
+                                "<div style='font-size: 2.8rem;'>⚽🏃‍♂️</div>" +
+                                "<div style='font-weight:bold; font-size:0.9rem;'>#10</div>" +
+                            "</div>" +
+                        "</div>" +
+                        "<div class='card-name'>" + inputName + "</div>" +
+                        "<div class='card-club'>نجم تشكيلة " + visitorName + " الخاصة ⭐</div>" +
+                        "<div class='card-stats'><div>سرعة 95</div><div>مهارة 96</div><div>تسديد 94</div></div>" +
+                        "<div class='card-desc'>لاعب أسطوري تم استدعاؤه خصيصاً لموقع " + visitorName + "!</div>" +
+                    "</div>";
+            }
+        }
+    </script>
+</body>
+</html>
